@@ -12,6 +12,7 @@ This list is not ordered by priority nor importance.
   - microsoft
   - github
 - add more tags to the list
+- create logo
 
 ### Maybe?
 
