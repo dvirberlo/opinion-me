@@ -1,0 +1,26 @@
+<mat-toolbar
+  id="buttomPanel"
+  ngClass.gt-xs="d-none"
+  class="fixed-toolbar"
+  role="banner"
+  fxLayout="row"
+>
+  <button mat-button [routerLink]="paths.home">
+    <div fxLayout="column">
+      <span class="material-symbols-rounded">home</span>
+      <span i18n="@@HomeButtonText">Home</span>
+    </div>
+  </button>
+  <button mat-button [routerLink]="paths.explore">
+    <div fxLayout="column">
+      <span class="material-symbols-rounded">explore</span>
+      <span i18n="@@ExploreButtonText">Explore</span>
+    </div>
+  </button>
+  <button mat-button [routerLink]="paths.notifications">
+    <div fxLayout="column">
+      <span class="material-symbols-rounded">notifications</span>
+      <span i18n="@@NotificationsButtonText">Notifications</span>
+    </div>
+  </button>
+</mat-toolbar>

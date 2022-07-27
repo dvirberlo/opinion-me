@@ -1,0 +1,99 @@
+<mat-toolbar
+  ngClass.gt-xs="fixed-toolbar"
+  id="header"
+  color="primary"
+  role="banner"
+>
+  <span fxFlex="15" id="appTitle" [routerLink]="paths.home" i18n="@@AppName"
+    >Opinion Me</span
+  >
+
+  <div ngClass.xs="d-none" fxFlex="70" fxLayoutAlign="center center">
+    <button mat-button [routerLink]="paths.home">
+      <div fxLayout="row" fxLayoutAlign="none center">
+        <span class="material-symbols-rounded">home</span>
+        <span i18n="@@HomeButtonText">Home</span>
+      </div>
+    </button>
+    <button mat-button [routerLink]="paths.explore">
+      <div fxLayout="row" fxLayoutAlign="none center">
+        <span class="material-symbols-rounded">explore</span>
+        <span i18n="@@ExploreButtonText">Explore</span>
+      </div>
+    </button>
+    <button mat-button [routerLink]="paths.notifications">
+      <div fxLayout="row" fxLayoutAlign="none center">
+        <span class="material-symbols-rounded">notifications</span>
+        <span i18n="@@NotificationsButtonText">Notifications</span>
+      </div>
+    </button>
+  </div>
+
+  <span fxFlex.xs="1 1 auto"></span>
+
+  <div fxFlex="15" id="authStatus" fxLayoutAlign="end center">
+    <button mat-button [routerLink]="paths.newPost" ngClass.lt-lg="d-none">
+      <div fxLayout="row" fxLayoutAlign="none center">
+        <span class="material-symbols-rounded">add</span>
+        <span i18n="@@NewPostButtonText">New Post</span>
+      </div>
+    </button>
+    <button
+      class="mat-button"
+      mat-icon-button
+      [routerLink]="paths.newPost"
+      ngClass.gt-md="d-none"
+    >
+      <span class="material-symbols-rounded">add</span>
+    </button>
+    <button
+      *ngIf="!this.authService.isLogged"
+      id="loginBtn"
+      mat-button
+      [routerLink]="paths.login"
+    >
+      <span class="material-symbols-rounded">login</span>
+      <span i18n="@@LoginButtonText" ngClass.lt-sm="d-none">Login</span>
+    </button>
+
+    <button
+      *ngIf="this.authService.isLogged"
+      [matMenuTriggerFor]="userMenu"
+      mat-icon-button
+    >
+      <picture>
+        <source [srcset]="this.userService.user?.photoURL" />
+        <source srcset="/assets/svg_icons/account_circle.svg" />
+        <img
+          id="userPhoto"
+          i18n-title
+          title="User photo"
+          alt="User photo"
+          onerror="this.onerror=null;this.parentElement.firstElementChild.srcset='/assets/svg_icons/account_circle.svg';"
+        />
+      </picture>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <button
+        fxLayout="row"
+        fxLayoutAlign="space-between center"
+        id="settingsBtn"
+        mat-menu-item
+        [routerLink]="paths.settings"
+      >
+        <span class="material-symbols-rounded">settings</span>
+        <span i18n="@@SettingsButtonText">Settings</span>
+      </button>
+      <button
+        fxLayout="row"
+        fxLayoutAlign="space-between center"
+        id="logoutBtn"
+        mat-menu-item
+        (click)="this.logout()"
+      >
+        <span color="primary" class="material-symbols-rounded">logout</span>
+        <span color="primary" i18n="@@LogoutButtonText">Log out</span>
+      </button>
+    </mat-menu>
+  </div>
+</mat-toolbar>

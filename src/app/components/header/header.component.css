@@ -1,0 +1,16 @@
+.fixed-toolbar {
+  position: fixed;
+  top: 0;
+}
+#appTitle {
+  cursor: pointer;
+}
+#userPhoto {
+  width: auto;
+  height: 100%;
+  border-radius: 50%;
+  vertical-align: baseline;
+}
+#userDefaultPhoto {
+  font-size: 30px;
+}

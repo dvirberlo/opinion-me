@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-US" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="HomeButtonText" datatype="html">
+        <source>Home</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/buttom-panel/buttom-panel.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/header/header.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ExploreButtonText" datatype="html">
+        <source>Explore</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/buttom-panel/buttom-panel.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/header/header.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="NotificationsButtonText" datatype="html">
+        <source>Notifications</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/buttom-panel/buttom-panel.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/header/header.component.html</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="AppName" datatype="html">
+        <source>Opinion Me</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/header/header.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="NewPostButtonText" datatype="html">
+        <source>New Post</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/header/header.component.html</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="LoginButtonText" datatype="html">
+        <source>Login</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/header/header.component.html</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2275588373173727878" datatype="html">
+        <source>User photo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/header/header.component.html</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/post-view/post-view.component.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/replies-view/replies-view.component.html</context>
+          <context context-type="linenumber">22,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="SettingsButtonText" datatype="html">
+        <source>Settings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/header/header.component.html</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="LogoutButtonText" datatype="html">
+        <source>Log out</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/header/header.component.html</context>
+          <context context-type="linenumber">102</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ContinueReadingButton" datatype="html">
+        <source>Continue reading</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/post-view/post-view.component.html</context>
+          <context context-type="linenumber">49,52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="NoCommentsIndication" datatype="html">
+        <source>No comments yet</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/replies-view/replies-view.component.html</context>
+          <context context-type="linenumber">10,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ShowMoreRepliesButton" datatype="html">
+        <source> Show more replies </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/replies-view/replies-view.component.html</context>
+          <context context-type="linenumber">73,76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1161964618992510771" datatype="html">
+        <source>Reply to post</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/reply-dialog/reply-dialog.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ReplyContentPlaceholder" datatype="html">
+        <source>Write here</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/reply-dialog/reply-dialog.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/new-post/new-post.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ContentValidError" datatype="html">
+        <source>please enter valid content</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/reply-dialog/reply-dialog.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/new-post/new-post.component.html</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="CancelButton" datatype="html">
+        <source> Cancel </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/reply-dialog/reply-dialog.component.html</context>
+          <context context-type="linenumber">40,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="SendButton" datatype="html">
+        <source> Send </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/reply-dialog/reply-dialog.component.html</context>
+          <context context-type="linenumber">51,53</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/new-post/new-post.component.html</context>
+          <context context-type="linenumber">56,58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="LoadMorePostsButton" datatype="html">
+        <source> Load more posts </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/home/home.component.html</context>
+          <context context-type="linenumber">16,18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1688759866382968453" datatype="html">
+        <source>New Post</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/new-post/new-post.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="TitleInputPlaceholder" datatype="html">
+        <source>Title...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/new-post/new-post.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="TitleValidError" datatype="html">
+        <source>please enter valid title</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/new-post/new-post.component.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="OnLogoutText" datatype="html">
+        <source>See you later!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/services/snackbar.service.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="PostSentMessage" datatype="html">
+        <source>Post sent!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/services/snackbar.service.ts</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ReplySentMessage" datatype="html">
+        <source>Reply sent!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/services/snackbar.service.ts</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ErrorTryAgainMessage" datatype="html">
+        <source>An error occured, please try again!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/services/snackbar.service.ts</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

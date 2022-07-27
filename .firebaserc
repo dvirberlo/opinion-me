@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "opinion-me-testing": {
+      "hosting": {
+        "client": [
+          "opinion-me-testing"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "opinion-me-testing"
+  }
+}

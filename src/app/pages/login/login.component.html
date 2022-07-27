@@ -1,0 +1,14 @@
+<div class="pt-5" fxLayout="column" fxLayoutAlign="space-between center">
+  <button
+    *ngFor="let provider of this.providers"
+    mat-stroked-button
+    (click)="provider.onclick()"
+    class="provider-btn m-1"
+  >
+    <picture>
+      <source [srcset]="'/assets/svg_icons/' + provider.icon + '.svg'" />
+      <img class="provider-icon" id="userPhoto" alt="Provider photo" />
+    </picture>
+    <span class="p-2">Continue with {{ provider.name }}</span>
+  </button>
+</div>

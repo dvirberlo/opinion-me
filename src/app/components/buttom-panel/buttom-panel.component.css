@@ -1,0 +1,16 @@
+.fixed-toolbar {
+  position: fixed;
+  bottom: 0;
+}
+#buttomPanel {
+  padding-inline: 0;
+  text-align: justify;
+  -ms-text-justify: distribute-all-lines;
+  text-justify: distribute-all-lines;
+}
+#buttomPanel button {
+  width: 100%;
+}
+#buttomPanel button span {
+  max-height: 25px;
+}

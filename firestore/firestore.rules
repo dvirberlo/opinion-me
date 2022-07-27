@@ -1,0 +1,167 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    match /info/0 {
+      allow get: if true;
+    }
+
+    match /users/{uid} {
+      allow get: if     isSelf(uid, request.auth);
+      allow list: if     isSelf(uid, request.auth);
+      allow create: if usersCreateCheck(request.resource.data) &&
+        (isSelf(uid, request.auth) && isRecent(request.time, request.resource.data.createAt));
+      allow update: if usersUpdateCheck(request.resource.data) &&
+        isSelf(uid, request.auth);
+      allow delete: if     isSelf(uid, request.auth);
+    }
+
+    match /profiles/{uid} {
+      allow get: if     true;
+      allow list: if     true;
+      allow create: if profilesCreateCheck(request.resource.data) &&
+        (isSelf(uid, request.auth) && isRecent(request.time, request.resource.data.createAt));
+      allow update: if profilesUpdateCheck(request.resource.data) &&
+        isSelf(uid, request.auth);
+      allow delete: if     isSelf(uid, request.auth);
+    }
+
+    match /posts/{postId} {
+      allow get: if     true;
+      allow list: if     true;
+      allow create: if postsCreateCheck(request.resource.data) &&
+        (isSelf(request.resource.data.author.uid, request.auth) && isRecent(request.time, request.resource.data.date) && postReactionsAreEmpty(request.resource.data));
+      allow update: if postsUpdateCheck(request.resource.data) &&
+        (isSelf(resource.data.author.uid, request.auth) || postReactionsUpdated(resource.data, request.resource.data, request.auth));
+      allow delete: if     isSelf(resource.data.author.uid, request.auth);
+    }
+
+    match /posts/{postId}/replies/{replyId} {
+      allow get: if     true;
+      allow list: if     true;
+      allow create: if repliesCreateCheck(request.resource.data) &&
+        (isSelf(request.resource.data.author.uid, request.auth) && isRecent(request.time, request.resource.data.date) && repliesVoteIsEmpty(request.resource.data));
+      allow update: if repliesUpdateCheck(request.resource.data) &&
+        reapliesUpdateCheck(resource.data, request.resource.data, request.auth);
+      allow delete: if     isSelf(resource.data.author.uid, request.auth);
+    }
+
+
+    function usersCreateCheck(data){
+      return data.createAt is number &&
+        data.email is string &&
+        data.displayName is string &&
+        data.photoURL is string &&
+        data.keys().hasOnly(["createAt","email","displayName","photoURL"]);
+    }
+    function usersUpdateCheck(data){
+      return usersCreateCheck(data) && request.resource.data.diff(resource.data).addedKeys().size() == 0;
+    }
+    function profilesCreateCheck(data){
+      return data.displayName is string &&
+        data.photoURL is string &&
+        data.createAt is number &&
+        data.keys().hasOnly(["displayName","photoURL","createAt"]);
+    }
+    function profilesUpdateCheck(data){
+      return profilesCreateCheck(data) && request.resource.data.diff(resource.data).addedKeys().size() == 0;
+    }
+    function postsCreateCheck(data){
+      return data.title is string &&
+        data.author is map &&
+        data.author.displayName is string &&
+        data.author.photoURL is string &&
+        data.author.uid is string &&
+        data.date is number &&
+        data.tags is map &&
+        data.content is string &&
+        data.reactions is map &&
+        data.reactions.like is list &&
+        data.reactions.dislike is list &&
+        data.reactions.love is list &&
+        data.reactions.haha is list &&
+        data.reactions.wow is list &&
+        data.reactions.angry is list &&
+        data.keys().hasOnly(["title","author","date","tags","content","reactions"]) &&
+        data.author.keys().hasOnly(["displayName","photoURL","uid"]) &&
+        data.reactions.keys().hasOnly(["like","dislike","love","haha","wow","angry"]);
+    }
+    function postsUpdateCheck(data){
+      return postsCreateCheck(data) && request.resource.data.diff(resource.data).addedKeys().size() == 0;
+    }
+    function repliesCreateCheck(data){
+      return data.author is map &&
+        data.author.displayName is string &&
+        data.author.photoURL is string &&
+        data.author.uid is string &&
+        data.date is number &&
+        data.content is string &&
+        data.votes is map &&
+        data.votes.upvotes is list &&
+        data.votes.downvotes is list &&
+        data.keys().hasOnly(["author","date","content","votes"]) &&
+        data.author.keys().hasOnly(["displayName","photoURL","uid"]) &&
+        data.votes.keys().hasOnly(["upvotes","downvotes"]);
+    }
+    function repliesUpdateCheck(data){
+      return repliesCreateCheck(data) && request.resource.data.diff(resource.data).addedKeys().size() == 0;
+    }
+
+    function isSelf(uid, auth){
+      // Perhapse the uid and also the doc's uid both could be null, there's why I check first that auth.uid != null
+      return auth.uid != null && auth.uid == uid
+    }
+    function isRecent(requestTime, fieldSecs){
+      // 1000 * 60 = 60000 (1 minute)
+      return (requestTime.toMillis() - fieldSecs*1000) < 60000;
+    }
+    function affectedOnly(resourceData, requestData, fields){
+      return requestData.diff(resourceData).affectedKeys().hasOnly(fields);
+    }
+    function changedSelfOnce(resourceArr, requestArr, auth){
+      let added = requestArr.removeAll(resourceArr);
+      let removed = resourceArr.removeAll(requestArr);
+      let addedSelfOnce = (requestArr.size() - resourceArr.size() <= 0) || (added == [auth.uid] && !resourceArr.hasAny([auth.uid]));
+      let removedSelfOnce = (resourceArr.size() - requestArr.size() <= 0) || (removed == [auth.uid] && !requestArr.hasAny([auth.uid]));
+      return addedSelfOnce && removedSelfOnce;
+    }
+
+    function repliesVoteIsEmpty(data){
+      return data.votes.upvotes.size() == 0 &&
+        data.votes.downvotes.toSet().size() == 0;
+    }
+
+    function reapliesUpdateCheck(resourceData, requestData, auth){
+      let upVoted = requestData.votes.upvotes.toSet().hasAny([auth.uid].toSet());
+      let downVoted = requestData.votes.downvotes.toSet().hasAny([auth.uid].toSet());
+      let votedInBoth = upVoted && downVoted;
+      return isSelf(resourceData, auth) && affectedOnly(resourceData, requestData, ["content", "date"].toSet()) ||
+        (   !isSelf(resourceData.author.uid, auth) && affectedOnly(resourceData, requestData, ["votes"].toSet()) &&
+            changedSelfOnce(resourceData.votes.upvotes, requestData.votes.upvotes, auth)  &&
+            changedSelfOnce(resourceData.votes.downvotes, requestData.votes.downvotes, auth) &&
+            !votedInBoth
+        );
+    }
+
+    function postReactionsAreEmpty(data){
+      return data.reactions.like.toSet().size() == 0 &&
+        data.reactions.dislike.toSet().size() == 0 &&
+        data.reactions.love.toSet().size() == 0 &&
+        data.reactions.haha.toSet().size() == 0 &&
+        data.reactions.wow.toSet().size() == 0 &&
+        data.reactions.angry.toSet().size() == 0;
+    }
+    function postReactionsUpdated(resourceData, requestData, auth){
+      let selfOnce = changedSelfOnce(resourceData.reactions.like, requestData.reactions.like, auth) &&
+        changedSelfOnce(resourceData.reactions.dislike, requestData.reactions.dislike, auth) &&
+        changedSelfOnce(resourceData.reactions.love, requestData.reactions.love, auth) &&
+        changedSelfOnce(resourceData.reactions.haha, requestData.reactions.haha, auth) &&
+        changedSelfOnce(resourceData.reactions.wow, requestData.reactions.wow, auth) &&
+        changedSelfOnce(resourceData.reactions.angry, requestData.reactions.angry, auth);
+      return selfOnce;
+    }
+  }
+}

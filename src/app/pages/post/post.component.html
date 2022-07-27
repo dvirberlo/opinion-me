@@ -1,0 +1,16 @@
+<section [ngSwitch]="this.isLoaded" class="container">
+  <app-post-view
+    *ngSwitchCase="true"
+    [post]="this.post"
+    [previewMode]="false"
+  ></app-post-view>
+  <mat-spinner
+    *ngSwitchCase="false"
+    mode="indeterminate"
+    diameter="30"
+    class="mx-auto my-1"
+  ></mat-spinner>
+</section>
+<app-page-not-found
+  *ngIf="this.isLoaded && this.post === undefined"
+></app-page-not-found>

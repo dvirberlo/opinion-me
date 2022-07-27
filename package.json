@@ -1,0 +1,74 @@
+{
+  "name": "opinion-me",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opinion-me/opinion-me.git"
+  },
+  "author": {
+    "email": "dvir.berl@gmail.com",
+    "name": "Dvir Berlowitz"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": "Please use yarn to install",
+    "yarn": ">=1.0.0"
+  },
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "build:gh": "ng build --base-href ./",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "runbuild": "http-server -p 8080 ./dist/client",
+    "i18n-update": "ng extract-i18n --output-path src/locale",
+    "fire-emu": "cd ./firestore && firebase emulators:start",
+    "fire-test": "cd ./firestore && yarn && yarn test",
+    "fire-generate": "cd ./firestore && yarn && yarn run generate",
+    "fire-migrate": "cd ./firestore && yarn && yarn run migrate"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^14.0.0",
+    "@angular/cdk": "^14.0.1",
+    "@angular/common": "^14.0.0",
+    "@angular/compiler": "^14.0.0",
+    "@angular/core": "^14.0.0",
+    "@angular/fire": "7.4.1",
+    "@angular/flex-layout": "^13.0.0-beta.38",
+    "@angular/forms": "^14.0.0",
+    "@angular/material": "^14.0.1",
+    "@angular/platform-browser": "^14.0.0",
+    "@angular/platform-browser-dynamic": "^14.0.0",
+    "@angular/router": "^14.0.0",
+    "@angular/service-worker": "^14.0.0",
+    "ngx-timeago": "^2.0.0",
+    "rxjs": "~7.5.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.11.4"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^14.0.0",
+    "@angular/cli": "~14.0.0",
+    "@angular/compiler-cli": "^14.0.0",
+    "@angular/localize": "14.0.2",
+    "@types/jasmine": "~4.0.0",
+    "http-server": "^14.1.1",
+    "husky": "^8.0.1",
+    "jasmine-core": "~4.1.0",
+    "karma": "~6.3.0",
+    "karma-chrome-launcher": "~3.1.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.0.0",
+    "karma-jasmine-html-reporter": "~1.7.0",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "typescript": "~4.7.2"
+  },
+  "lint-staged": {
+    "**/*.{js,ts,json,html,css,scss,md}": [
+      "yarn prettier --write"
+    ]
+  }
+}

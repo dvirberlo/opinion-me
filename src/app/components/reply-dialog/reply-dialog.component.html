@@ -1,0 +1,55 @@
+<form
+  *ngIf="this.formGroup !== undefined"
+  [formGroup]="this.formGroup"
+  fxLayout="column"
+  id="dialogContainer"
+>
+  <h2 mat-dialog-title i18n>Reply to post</h2>
+  <mat-form-field appearance="outline" fxFlex="1 1 auto">
+    <textarea
+      formControlName="content"
+      [maxlength]="this.MAX_REPLY_LENGTH"
+      matInput
+      cdkAutosizeMinRows="4"
+      (keydown.control.enter)="this.send()"
+      id="inputArea"
+      class="mat-input-element"
+      placeholder="Write here"
+      i18n-placeholder="@@ReplyContentPlaceholder"
+    ></textarea>
+    <mat-hint align="end"
+      >{{ this.content?.value.length }} / {{ this.MAX_REPLY_LENGTH }}</mat-hint
+    >
+    <mat-error
+      *ngIf="this.content?.touched && this.content?.invalid"
+      i18n="@@ContentValidError"
+      >please enter valid content</mat-error
+    >
+  </mat-form-field>
+  <div
+    ngClass.gt-xs="actionsButtonsContainer"
+    mat-dialog-actions
+    fxLayout="row"
+    fxLayoutAlign="center center"
+  >
+    <button
+      fxFlex.xs="1 0 auto"
+      mat-button
+      (click)="this.cancel()"
+      i18n="@@CancelButton"
+    >
+      Cancel
+    </button>
+    <button
+      type="submit"
+      fxFlex.xs="1 0 auto"
+      mat-raised-button
+      color="primary"
+      [disabled]="this.formGroup.invalid"
+      (click)="this.send()"
+      i18n="@@SendButton"
+    >
+      Send
+    </button>
+  </div>
+</form>

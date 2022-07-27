@@ -1,0 +1,15 @@
+{
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=827846
+  "recommendations": [
+    "angular.ng-template",
+    "esbenp.prettier-vscode",
+    "fabiospampinato.vscode-todo-plus",
+    "eg2.vscode-npm-script",
+    "ms-vscode.vscode-typescript-next",
+    "dbaeumer.vscode-eslint",
+    "editorconfig.editorconfig",
+    "johnpapa.angular2",
+    "vivaxy.vscode-conventional-commits",
+    "eamodio.gitlens"
+  ]
+}

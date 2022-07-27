@@ -1,0 +1,86 @@
+<!-- div shows only if loaded -->
+<div *ngIf="this.isLoaded" class="ms-4">
+  <!-- no comments idication when replies list is empty -->
+  <div
+    *ngIf="
+      this.cursorReader?.docs?.length === 0 && !this.cursorReader?.isLoading
+    "
+    class="text-center"
+  >
+    <h3 i18n="@@NoCommentsIndication">No comments yet</h3>
+  </div>
+  <!-- div for each reply -->
+  <div class="replyCard my-1" *ngFor="let replyDoc of this.cursorReader?.docs">
+    <mat-card-subtitle
+      class="ms-1 my-1 linkCursor"
+      [routerLink]="['/', paths.profile, replyDoc.data.author.uid]"
+    >
+      <!-- profile picture -->
+      <picture>
+        <source [srcset]="replyDoc.data.author.photoURL" />
+        <source srcset="/assets/svg_icons/account_circle.svg" />
+        <img
+          class="replyProfilePhoto"
+          i18n-title
+          title="User photo"
+          alt="User photo"
+          onerror="this.onerror=null;this.parentElement.firstElementChild.srcset='/assets/svg_icons/account_circle.svg';"
+        />
+      </picture>
+      <!-- profile name and reply date -->
+      <span>
+        {{ replyDoc.data.author.displayName }} •
+        {{ replyDoc.data.date * 1000 | timeago }}
+      </span>
+    </mat-card-subtitle>
+    <!-- reply content -->
+    <mat-card-content class="ms-1 mb-0 multilineText words-break">
+      {{ replyDoc.data.content }}
+    </mat-card-content>
+    <!-- reply actions -->
+    <mat-card-actions
+      class="mb-0 m-0 p-0"
+      fxLayout="row"
+      fxLayoutAlign="start center"
+    >
+      <button
+        (click)="this.thumbsUp(replyDoc)"
+        mat-icon-button
+        class="mat-button mx-1"
+        [ngClass]="this.hasUpvoted(replyDoc.data) ? 'activated' : ''"
+        [disabled]="this.isSelf(replyDoc.data.author)"
+      >
+        <span class="material-symbols-rounded"> thumb_up_off </span>
+      </button>
+      <span id="voteBalance">{{ replyDoc.data.votes.getBalance() }}</span>
+      <button
+        (click)="this.thumbsDown(replyDoc)"
+        mat-icon-button
+        class="mat-button mx-1"
+        [ngClass]="this.hasDownvoted(replyDoc.data) ? 'activated' : ''"
+        [disabled]="this.isSelf(replyDoc.data.author)"
+      >
+        <span class="material-symbols-rounded"> thumb_down_off </span>
+      </button>
+    </mat-card-actions>
+
+    <!-- load more replies button -->
+  </div>
+  <div *ngIf="this.cursorReader?.hasMore && !this.cursorReader?.isLoading">
+    <button
+      (click)="this.loadReplies()"
+      class="p-0"
+      mat-flat-button
+      i18n="@@ShowMoreRepliesButton"
+    >
+      Show more replies
+    </button>
+  </div>
+</div>
+<!-- spinner until load -->
+<mat-spinner
+  *ngIf="this.cursorReader?.isLoading"
+  mode="indeterminate"
+  diameter="30"
+  class="mx-auto"
+></mat-spinner>

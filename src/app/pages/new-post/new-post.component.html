@@ -1,0 +1,91 @@
+<div *ngIf="this.formGroup !== undefined">
+  <form [formGroup]="this.formGroup" fxLayout="column" class="container mt-2">
+    <h1 class="text-center" i18n>New Post</h1>
+    <mat-form-field appearance="fill">
+      <mat-label i18n="@@TitleInputPlaceholder">Title...</mat-label>
+      <input
+        formControlName="title"
+        [maxlength]="this.MAX_POST_TITLE_LENGTH"
+        matInput
+      />
+      <mat-hint align="end"
+        >{{ this.title?.value.length }} /
+        {{ this.MAX_POST_TITLE_LENGTH }}</mat-hint
+      >
+      <mat-error
+        *ngIf="this.title?.touched && this.title?.invalid"
+        i18n="@@TitleValidError"
+        >please enter valid title</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field appearance="fill" fxFlex="1 1 auto">
+      <textarea
+        [maxlength]="this.MAX_POST_LENGTH"
+        matInput
+        formControlName="content"
+        cdkTextareaAutosize="true"
+        cdkAutosizeMinRows="4"
+        (keydown.control.enter)="this.send()"
+        id="inputArea"
+        class="mat-input-element"
+        placeholder="Write here"
+        i18n-placeholder="@@ReplyContentPlaceholder"
+      ></textarea>
+      <mat-hint align="end"
+        >{{ this.content?.value.length }} / {{ this.MAX_POST_LENGTH }}</mat-hint
+      >
+      <mat-error
+        *ngIf="this.content?.touched && this.content?.invalid"
+        i18n="@@ContentValidError"
+        >please enter valid content</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field appearance="fill" fxFlex="1 1 auto">
+      <mat-label>Tags</mat-label>
+      <mat-chip-list #chipList aria-label="Tag selection">
+        <mat-chip
+          *ngFor="let tag of this.tagsInput"
+          (removed)="this.remove(tag)"
+        >
+          {{ tag }}
+          <button matChipRemove fxLayoutAlign="center center">
+            <span class="material-symbols-rounded">remove</span>
+          </button>
+        </mat-chip>
+        <input
+          formControlName="tags"
+          #tagInput
+          [matAutocomplete]="auto"
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="this.separatorKeysCodes"
+          (matChipInputTokenEnd)="this.addTag($event)"
+        />
+      </mat-chip-list>
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        (optionSelected)="this.selected($event)"
+      >
+        <mat-option *ngFor="let tag of this.filteredTags | async" [value]="tag">
+          {{ tag }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <div
+      class="actionsButtonsContainer"
+      fxLayout="row"
+      fxLayoutAlign="center center"
+    >
+      <button
+        type="submit"
+        fxFlex.xs="1 0 auto"
+        mat-raised-button
+        color="primary"
+        (click)="this.send()"
+        [disabled]="this.formGroup.invalid"
+        i18n="@@SendButton"
+      >
+        Send
+      </button>
+    </div>
+  </form>
+</div>

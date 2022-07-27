@@ -1,0 +1,42 @@
+.postProfilePhoto {
+  width: auto;
+  height: 1.5em;
+  border-radius: 50%;
+  margin-inline-end: 0.5rem;
+}
+
+.postCard mat-card-content {
+  font-size: 17px !important;
+}
+
+::ng-deep.mat-menu-panel {
+  min-width: 0px !important;
+  min-height: 0px !important;
+}
+::ng-deep.mat-menu-panel div {
+  padding: 0px !important;
+}
+
+/* reactions button: */
+button.reaction-btn-like span {
+  color: #07ff13;
+}
+button.reaction-btn-dislike span {
+  color: #0713ff;
+}
+button.reaction-btn-love span {
+  color: #ff0707;
+}
+button.reaction-btn-haha span {
+  color: #f3ff07;
+}
+button.reaction-btn-wow span {
+  color: #ff07ff;
+}
+button.reaction-btn-angry span {
+  color: #ff9307;
+}
+
+.reaction-btn-active {
+  background-color: #333333;
+}

@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+yarn lint-staged
+# before commit, please run the suited test(s):
+# yarn test --browsers=ChromeHeadless --watch=false
+# yarn run fire-test --exit

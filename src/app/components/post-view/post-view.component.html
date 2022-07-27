@@ -1,0 +1,118 @@
+<mat-card class="my-1 postCard" *ngIf="this.post !== undefined">
+  <mat-card-header>
+    <mat-card-title class="words-break">{{
+      this.post.data.title
+    }}</mat-card-title>
+    <mat-card-subtitle
+      [routerLink]="['/', paths.profile, this.post.data.author.uid]"
+      class="linkCursor"
+    >
+      <picture>
+        <source [srcset]="this.post.data.author.photoURL" />
+        <source srcset="/assets/svg_icons/account_circle.svg" />
+        <img
+          class="postProfilePhoto"
+          i18n-title
+          title="User photo"
+          alt="User photo"
+          onerror="this.onerror=null;this.parentElement.firstElementChild.srcset='/assets/svg_icons/account_circle.svg';"
+        /> </picture
+      >{{ this.post.data.author.displayName }} •
+      {{ this.post.data.date * 1000 | timeago }}</mat-card-subtitle
+    >
+  </mat-card-header>
+  <!-- content -->
+  <mat-card-content class="my-1">
+    <span class="multilineText words-break">
+      {{ this.previewMode ? this.previewContent() : this.post.data.content }}
+    </span>
+  </mat-card-content>
+  <!-- tags -->
+  <mat-chip-list *ngIf="!this.previewMode" class="example-chip">
+    <mat-chip
+      *ngFor="let tag of this.tagsList"
+      [routerLink]="['/', this.paths.tags, tag]"
+      class="linkCursor"
+    >
+      {{ tag }}
+    </mat-chip>
+  </mat-chip-list>
+  <!-- reactions -->
+  <mat-card-actions
+    *ngIf="!this.previewMode"
+    class="mb-0 m-0 p-0"
+    fxLayout="row"
+    fxLayoutAlign="start center"
+  >
+    <div *ngFor="let reaction of this.ReactionList">
+      <button
+        *ngIf="this.post?.data?.reactions?.hasReactions(reaction)"
+        mat-stroked-button
+        class="mx-1"
+        [ngClass]="
+          'reaction-btn-' +
+          reaction +
+          (this.hasReacted(reaction) ? ' reaction-btn-active activated' : '')
+        "
+        (click)="this.reactToggle(reaction)"
+      >
+        <span class="material-symbols-rounded">
+          {{ this.getReactionIcon(reaction) }}
+        </span>
+        {{ this.post.data.reactions.getReactionCount(reaction) }}
+      </button>
+    </div>
+  </mat-card-actions>
+  <!-- action buttons -->
+  <mat-card-actions
+    *ngIf="!this.previewMode"
+    class="mb-0 m-0 p-0"
+    fxLayout="row"
+    fxLayoutAlign="start center"
+  >
+    <button (click)="this.reply()" mat-icon-button class="mat-button">
+      <span class="material-symbols-rounded"> add_comment </span>
+    </button>
+    <button
+      [matMenuTriggerFor]="reactionMenu"
+      *ngIf="!this.post?.data?.reactions?.hasAllReactions()"
+      mat-icon-button
+      class="mat-button"
+    >
+      <span class="material-symbols-rounded"> add_reaction </span>
+    </button>
+  </mat-card-actions>
+  <mat-menu #reactionMenu style="min-width: 0px !important" xPosition="after">
+    <div fxLayout="row" fxLayoutAlign="space-around center overflow-hidden">
+      <div *ngFor="let reaction of this.ReactionList">
+        <button
+          *ngIf="!this.post?.data?.reactions?.hasReactions(reaction)"
+          mat-icon-button
+          class="mat-button"
+          [ngClass]="'reaction-btn-' + reaction"
+          (click)="this.reactToggle(reaction)"
+        >
+          <span class="material-symbols-rounded">
+            {{ this.getReactionIcon(reaction) }}
+          </span>
+        </button>
+      </div>
+    </div>
+  </mat-menu>
+  <!-- replies -->
+  <app-replies-view
+    *ngIf="!this.previewMode && this.repliesReader !== undefined"
+    [cursorReader]="this.repliesReader"
+    [postId]="this.post.id"
+  ></app-replies-view>
+  <button
+    *ngIf="this.previewMode"
+    mat-raised-button
+    color="primary"
+    (click)="this.previewMode = false"
+    class="mt-1"
+  >
+    <span class="material-symbols-rounded"> arrow_forward </span>
+    <span i18n="@@ContinueReadingButton">Continue reading</span>
+  </button>
+</mat-card>

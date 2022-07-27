@@ -1,0 +1,33 @@
+<section [ngSwitch]="this.isLoaded" class="container">
+  <div *ngSwitchCase="true">
+    <mat-card *ngIf="this.profile !== undefined">
+      <div fxLayout="column" fxLayoutAlign="space-around center">
+        <picture>
+          <source [srcset]="this.profile.data.displayName" />
+          <source srcset="/assets/svg_icons/account_circle.svg" />
+          <img
+            class="profilePhoto my-2"
+            i18n-title
+            title="User photo"
+            alt="User photo"
+            onerror="this.onerror=null;this.parentElement.firstElementChild.srcset='/assets/svg_icons/account_circle.svg';"
+          />
+        </picture>
+        <mat-card-title class="my-2">{{
+          this.profile.data.displayName
+        }}</mat-card-title>
+        <mat-card-subtitle>
+          <span i18n="@@JoinedLabel">Joined</span>
+          {{ this.profile.data.createAt * 1000 | timeago }}
+        </mat-card-subtitle>
+      </div>
+    </mat-card>
+    <app-page-not-found *ngIf="this.profile === undefined"></app-page-not-found>
+  </div>
+  <mat-spinner
+    *ngSwitchCase="false"
+    mode="indeterminate"
+    diameter="30"
+    class="mx-auto my-1"
+  ></mat-spinner>
+</section>

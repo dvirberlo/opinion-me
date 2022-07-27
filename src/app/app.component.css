@@ -1,0 +1,10 @@
+.toolbar-padding {
+  padding-top: 64px;
+}
+.panel-padding {
+  padding-bottom: 56px;
+}
+
+#app-root {
+  height: 100%;
+}
