@@ -4,6 +4,8 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 The main purpose of this project was to learn Angular and Firebase, by creating a web app for getting feedback and giving feedback on ideas.
 
+The project is hosted at [opinion-me-testing.web.app](https://opinion-me-testing.web.app).
+
 ## Contribute
 
 Feel free to issue bug reports and feature requests.
