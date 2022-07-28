@@ -10,7 +10,7 @@ The project is hosted at [opinion-me-testing.web.app](https://opinion-me-testing
 
 Feel free to issue bug reports and feature requests.
 
-Please first check the [roadmap.md](./docs/roadmap.md) and existing [issues](./issues).
+Please first check the [roadmap.md](./docs/roadmap.md) and existing [issues](../../issues).
 
 If you want to write it yourself- open an issue and declare your intension. [PRs](./pulls) will be wellcomed.
 
