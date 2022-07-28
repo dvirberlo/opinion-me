@@ -1,43 +1,27 @@
-# Client
+# Opinion Me
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.0.0.
 
-## Development server
+The main purpose of this project was to learn Angular and Firebase, by creating a web app for getting feedback and giving feedback on ideas.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Contribute
 
-## Code scaffolding
+Feel free to issue bug reports and feature requests.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Please first check the [roadmap.md](./docs/roadmap.md) and existing [issues](./issues).
 
-## Build
+If you want to write it yourself- open an issue and declare your intension. [PRs](./pulls) will be wellcomed.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Development
 
-## Running unit tests
+Please install [yarn](https://classic.yarnpkg.com/lang/en/docs/install/).
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+For a dev server Run `yarn && yarn start` (The application will automatically reload if you change any of the source files).
 
-## Running end-to-end tests
+Navigate to [`http://localhost:4200/`](http://localhost:4200/).
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Running unit tests
 
-## Further help
+Run `yarn test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-
-## Firestore Rules Unit Testing
-
-([yarn](https://classic.yarnpkg.com/lang/en/docs/install/) is required for this process)
-
-first start the firestore emulator:
-
-```sh
-yarn run fire-emu
-```
-
-then, run the tests by running:
-
-```sh
-yarn run fire-test
-```
+(Run `yarn run fire-emu` and then `yarn run fire-test` to test firestore rules.)
