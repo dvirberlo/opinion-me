@@ -52,7 +52,9 @@
       >
         <span class="material-symbols-rounded"> thumb_up_off </span>
       </button>
-      <span id="voteBalance">{{ replyDoc.data.votes.getBalance() }}</span>
+      <span id="voteBalance">{{
+        this.VoteGetBalance(replyDoc.data.votes)
+      }}</span>
       <button
         (click)="this.thumbsDown(replyDoc)"
         mat-icon-button

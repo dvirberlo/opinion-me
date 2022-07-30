@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Doc } from 'src/app/models/firestore';
-import { Profile } from 'src/app/models/profile';
+import { Profile } from 'src/app/models/user';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({

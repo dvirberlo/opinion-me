@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { map, Observable, startWith } from 'rxjs';
 import { paths } from 'src/app/constants/paths';
 import { MAX_POST_LENGTH, MAX_POST_TITLE_LENGTH } from 'src/app/constants/post';
-import { Post } from 'src/app/models/post';
+import { PostTagsNow } from 'src/app/models/post';
 import { Tag, TagsList } from 'src/app/models/tags';
 import { PostsService } from 'src/app/services/posts.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
@@ -89,7 +89,7 @@ export class NewPostComponent implements OnInit {
       return this.snackbarService.pleaseLogin();
     if (this.formGroup.invalid) return this.formGroup.markAllAsTouched();
 
-    const newPost = Post.tagsNow(
+    const newPost = PostTagsNow(
       this.title?.value,
       this.userService.author,
       this.tagsInput,

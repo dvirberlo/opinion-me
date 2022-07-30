@@ -46,7 +46,7 @@
   >
     <div *ngFor="let reaction of this.ReactionList">
       <button
-        *ngIf="this.post?.data?.reactions?.hasReactions(reaction)"
+        *ngIf="ReactionsHasReactions(this.post.data.reactions, reaction)"
         mat-stroked-button
         class="mx-1"
         [ngClass]="
@@ -59,34 +59,15 @@
         <span class="material-symbols-rounded">
           {{ this.getReactionIcon(reaction) }}
         </span>
-        {{ this.post.data.reactions.getReactionCount(reaction) }}
+        {{ ReactionsGetReactionCount(this.post.data.reactions, reaction) }}
       </button>
     </div>
-  </mat-card-actions>
-  <!-- action buttons -->
-  <mat-card-actions
-    *ngIf="!this.previewMode"
-    class="mb-0 m-0 p-0"
-    fxLayout="row"
-    fxLayoutAlign="start center"
-  >
-    <button (click)="this.reply()" mat-icon-button class="mat-button">
-      <span class="material-symbols-rounded"> add_comment </span>
-    </button>
-    <button
-      [matMenuTriggerFor]="reactionMenu"
-      *ngIf="!this.post?.data?.reactions?.hasAllReactions()"
-      mat-icon-button
-      class="mat-button"
-    >
-      <span class="material-symbols-rounded"> add_reaction </span>
-    </button>
   </mat-card-actions>
   <mat-menu #reactionMenu style="min-width: 0px !important" xPosition="after">
     <div fxLayout="row" fxLayoutAlign="space-around center overflow-hidden">
       <div *ngFor="let reaction of this.ReactionList">
         <button
-          *ngIf="!this.post?.data?.reactions?.hasReactions(reaction)"
+          *ngIf="!ReactionsHasReactions(this.post.data.reactions, reaction)"
           mat-icon-button
           class="mat-button"
           [ngClass]="'reaction-btn-' + reaction"
@@ -99,6 +80,25 @@
       </div>
     </div>
   </mat-menu>
+  <!-- action buttons -->
+  <mat-card-actions
+    *ngIf="!this.previewMode"
+    class="mb-0 m-0 p-0"
+    fxLayout="row"
+    fxLayoutAlign="start center"
+  >
+    <button (click)="this.reply()" mat-icon-button class="mat-button">
+      <span class="material-symbols-rounded"> add_comment </span>
+    </button>
+    <button
+      [matMenuTriggerFor]="reactionMenu"
+      *ngIf="!ReactionsHasAllReactions(this.post.data.reactions)"
+      mat-icon-button
+      class="mat-button"
+    >
+      <span class="material-symbols-rounded"> add_reaction </span>
+    </button>
+  </mat-card-actions>
   <!-- replies -->
   <app-replies-view
     *ngIf="!this.previewMode && this.repliesReader !== undefined"

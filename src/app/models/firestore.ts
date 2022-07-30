@@ -4,53 +4,35 @@ export type FireConverter = {
   fromFirestore: (snapshot: any, options: any | undefined) => any;
 };
 
-const toFirestore = (value: any) => {
-  const output: any = { ...value };
-  // Extract value of each field
-  Object.keys(value).forEach((k) => {
-    const valueField = value[k];
-    if (output[k] instanceof Set) output[k] = Array.from(valueField);
-    else if (typeof output[k] === 'object' && !Array.isArray(output[k]))
-      output[k] = toFirestore(valueField);
+const toFirestore = (object: any) => {
+  Object.keys(object).forEach((k) => {
+    const valueField = object[k];
+    if (object[k] instanceof Set) object[k] = Array.from(valueField);
+    else if (typeof object[k] === 'object' && !Array.isArray(object[k]))
+      object[k] = toFirestore(valueField);
   });
-  return output;
+  return object;
 };
 
-const fillFields = (
-  model: any,
-  values: any,
-  anyObjects?: string[],
-  isAnyObject: boolean = false
-): void => {
-  // Extract value of each field
-  Object.keys(values).forEach((k) => {
-    const valueField = values[k];
-    if (model[k] instanceof Set) model[k] = new Set(valueField);
+const fillFields = (object: any, example: any): void => {
+  Object.keys(object).forEach((k) => {
+    if (example[k] instanceof Set) object[k] = new Set(object[k]);
     else if (
-      typeof valueField === 'object' &&
-      (typeof model[k] === 'object' || anyObjects?.includes(k)) &&
-      !Array.isArray(model[k])
+      !Array.isArray(example[k]) &&
+      typeof example[k] === 'object' &&
+      typeof object[k] === 'object'
     )
-      fillFields(model[k], valueField, anyObjects, anyObjects?.includes(k));
-    // add only if key is in model and they are the same type
-    else if (
-      isAnyObject ||
-      (k in model && typeof model[k] === typeof valueField)
-    )
-      model[k] = valueField;
+      fillFields(object[k], example[k]);
   });
 };
 
-export const FireConvertTo = <T>(
-  dummyModel: () => T,
-  anyObjects?: string[]
-) => {
+export const FireConvertTo = <T>(example: T) => {
   return {
     toFirestore,
     fromFirestore: (snapshot: any, options: any | undefined): T => {
-      const model = dummyModel();
-      fillFields(model, snapshot.data(options), anyObjects);
-      return model as T;
+      const object = snapshot.data(options);
+      fillFields(object, example);
+      return object as T;
     },
   };
 };

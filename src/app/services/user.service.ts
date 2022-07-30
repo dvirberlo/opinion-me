@@ -9,8 +9,14 @@ import {
 } from '@angular/fire/firestore';
 import { PROFILES_PATH, USERS_PATH } from '../constants/firestore';
 import { FireCache } from '../models/firestore';
-import { Author, Profile } from '../models/profile';
-import { User } from './../models/user';
+import {
+  Author,
+  AuthorFromUser,
+  Profile,
+  ProfileConverter,
+  ProfileFromUser,
+} from '../models/user';
+import { User, UserConverter, UserNow } from './../models/user';
 import { readDoc } from './firestore-tools';
 
 @Injectable({
@@ -43,19 +49,18 @@ export class UserService {
 
   private getUserFromDB = async (user: AuthUser) => {
     const userRef = doc(this.firestore, USERS_PATH, user.uid).withConverter(
-      User.converter
+      UserConverter
     );
     const userSnap = await readDoc<User>(
       userRef,
-      User.converter,
+      UserConverter,
       FireCache.Server
     );
     // listens to updates and apply to user property
     onSnapshot(userRef, (observer) => {
       this.user = observer.data();
-      this.author = this.user
-        ? Author.fromUser(this.user, user.uid)
-        : undefined;
+      console.log(observer.data());
+      this.author = this.user ? AuthorFromUser(this.user, user.uid) : undefined;
     });
     // creates new user if does not exists yet
     if (!userSnap.exists()) {
@@ -69,26 +74,26 @@ export class UserService {
     user: AuthUser,
     userRef: DocumentReference<User>
   ) => {
-    const userDoc = User.now(user.email, user.displayName, user.photoURL);
+    const userDoc = UserNow(user.email, user.displayName, user.photoURL);
     setDoc(userRef, userDoc);
     // creates also user profile
-    this.createNewProfile(user.uid, Profile.fromUser(userDoc));
+    this.createNewProfile(user.uid, ProfileFromUser(userDoc));
     return userDoc;
   };
 
   private verifyProfileCreated = async (uid: string, user: User) => {
     const profieSnap = await readDoc<Profile>(
       doc(this.firestore, PROFILES_PATH, uid),
-      Profile.converter,
+      ProfileConverter,
       FireCache.Server
     );
     // creates new user profile if does not exists yet
-    if (!profieSnap.exists()) this.createNewProfile(uid, user);
+    if (!profieSnap.exists()) this.createNewProfile(uid, user as Profile);
   };
 
   private createNewProfile = async (uid: string, profile: Profile) => {
     const profileRef = doc(this.firestore, PROFILES_PATH, uid).withConverter(
-      Profile.converter
+      ProfileConverter
     );
     setDoc(profileRef, profile);
   };
@@ -97,7 +102,7 @@ export class UserService {
     new Promise<Profile>((resolve, reject) => {
       readDoc<Profile>(
         doc(this.firestore, PROFILES_PATH, uid),
-        Profile.converter
+        ProfileConverter
       )
         .then((snap) => {
           const data = snap.data();

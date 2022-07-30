@@ -4,8 +4,17 @@ import { MatDialog } from '@angular/material/dialog';
 import { MAX_POST_PREVIEW_LENGTH } from 'src/app/constants/post';
 import { RELPY_DIALOG_CONFIG } from 'src/app/constants/reply';
 import { Doc } from 'src/app/models/firestore';
-import { Post, Reaction, ReactionsList } from 'src/app/models/post';
-import { Reply } from 'src/app/models/replies';
+import {
+  Post,
+  Reaction,
+  ReactionsGetReactionCount,
+  ReactionsHasAllReactions,
+  ReactionsHasReacted,
+  ReactionsHasReactions,
+  ReactionsList,
+  ReactionsToggleReaction,
+} from 'src/app/models/post';
+import { Reply, ReplyNow } from 'src/app/models/replies';
 import { CursorReader } from 'src/app/services/firestore-tools';
 import { PostsService } from 'src/app/services/posts.service';
 import { RepliesService } from 'src/app/services/replies.service';
@@ -25,6 +34,9 @@ export class PostViewComponent implements OnInit {
 
   public paths = paths;
   public ReactionList = ReactionsList;
+  public ReactionsHasAllReactions = ReactionsHasAllReactions;
+  public ReactionsHasReactions = ReactionsHasReactions;
+  public ReactionsGetReactionCount = ReactionsGetReactionCount;
   public tagsList: string[] = [];
 
   public repliesReader?: CursorReader<Reply>;
@@ -68,9 +80,9 @@ export class PostViewComponent implements OnInit {
       result === undefined
     )
       return;
-    const reaply = Reply.now(this.userService.author, result);
+    const reaply = ReplyNow(this.userService.author, result);
     this.repliesService
-      .addReply(reaply, this.post.id)
+      .addReply(structuredClone(reaply), this.post.id)
       .then((reference: DocumentReference<Reply>) => {
         this.repliesReader?.addedToTop(new Doc<Reply>(reference.id, reaply));
       })
@@ -98,16 +110,25 @@ export class PostViewComponent implements OnInit {
     if (typeof this.userService.author?.uid !== 'string')
       return this.snackbarService.pleaseLogin();
     if (this.post === undefined) return;
-    this.post.data.reactions.toggleReaction(
+    console.log(this.post.data);
+    ReactionsToggleReaction(
+      this.post.data.reactions,
       reaction,
       this.userService.author.uid
     );
-    this.postsService.reactionUpdate(this.post);
+    console.log(this.post.data);
+    this.postsService.reactionUpdate(structuredClone(this.post));
+    console.log(this.post.data);
   };
   public hasReacted = (reaction: Reaction): boolean => {
-    if (typeof this.userService.author?.uid !== 'string') return false;
+    if (
+      typeof this.userService.author?.uid !== 'string' ||
+      this.post === undefined
+    )
+      return false;
     return (
-      this.post?.data.reactions.hasReacted(
+      ReactionsHasReacted(
+        this.post?.data.reactions,
         reaction,
         this.userService.author.uid
       ) || false

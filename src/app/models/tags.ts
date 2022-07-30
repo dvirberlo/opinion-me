@@ -9,4 +9,3 @@ export enum Tag {
 }
 
 export const TagsList = Object.keys(Tag);
-console.log(TagsList);

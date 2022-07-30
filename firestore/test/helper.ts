@@ -1,6 +1,10 @@
 import * as firebase from '@firebase/testing';
-import { Author } from '../../src/app/models/profile';
-import { User } from '../../src/app/models/user';
+import {
+  Author,
+  AuthorFromUser,
+  User,
+  UserNow,
+} from '../../src/app/models/user';
 
 const PROJECT_ID = `opinion-me-testing`;
 const getCustomPID = () => `opinion-me-testing-${Date.now()}`;
@@ -9,11 +13,11 @@ export const getRandomId = () => `rules-test-${Date.now()}`;
 export const selfUid: string = 'test-user';
 export const anotherUid: string = 'test-another-user';
 
-export const selfUser: User = User.now('test-another', 'test-another', '');
-export const selfAuthor: Author = Author.fromUser(selfUser, selfUid);
+export const selfUser: User = UserNow('test-another', 'test-another', '');
+export const selfAuthor: Author = AuthorFromUser(selfUser, selfUid);
 
-export const anotherUser: User = User.now('test-another', 'test-another', '');
-export const anotherAuthor: Author = Author.fromUser(anotherUser, anotherUid);
+export const anotherUser: User = UserNow('test-another', 'test-another', '');
+export const anotherAuthor: Author = AuthorFromUser(anotherUser, anotherUid);
 
 export const dummyDoc = {
   name: 'dummy',

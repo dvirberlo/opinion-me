@@ -1,8 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { paths } from 'src/app/constants/paths';
 import { Doc } from 'src/app/models/firestore';
-import { Author } from 'src/app/models/profile';
-import { Reply } from 'src/app/models/replies';
+import { Author } from 'src/app/models/user';
+import {
+  Reply,
+  VoteGetBalance,
+  VoteHasDonwvoted,
+  VoteHasUpvoted,
+  VoteToggleDownvote,
+  VoteToggleUpvote,
+} from 'src/app/models/replies';
 import { CursorReader } from 'src/app/services/firestore-tools';
 import { RepliesService } from 'src/app/services/replies.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
@@ -19,6 +26,7 @@ export class ReplisViewComponent implements OnInit {
   public isLoaded: boolean = false;
 
   public paths = paths;
+  public VoteGetBalance = VoteGetBalance;
 
   constructor(
     public userService: UserService,
@@ -39,11 +47,11 @@ export class ReplisViewComponent implements OnInit {
 
   public thumbsUp = (reply: Doc<Reply>) =>
     this.vote(reply, (reply) =>
-      reply.data.votes.toggleUpvote(this.userService.author?.uid || '')
+      VoteToggleUpvote(reply.data.votes, this.userService.author?.uid || '')
     );
   public thumbsDown = (reply: Doc<Reply>) =>
     this.vote(reply, (reply) =>
-      reply.data.votes.toggleDownvote(this.userService.author?.uid || '')
+      VoteToggleDownvote(reply.data.votes, this.userService.author?.uid || '')
     );
 
   private vote = (reply: Doc<Reply>, action: (reply: Doc<Reply>) => void) => {
@@ -62,11 +70,11 @@ export class ReplisViewComponent implements OnInit {
 
   public hasUpvoted(reply: Reply): boolean {
     if (this.userService.author?.uid === undefined) return false;
-    return reply.votes.hasUpvoted(this.userService.author.uid || '');
+    return VoteHasUpvoted(reply.votes, this.userService.author.uid || '');
   }
   public hasDownvoted(reply: Reply): boolean {
     if (this.userService.author?.uid === undefined) return false;
-    return reply.votes.hasDonwvoted(this.userService.author.uid || '');
+    return VoteHasDonwvoted(reply.votes, this.userService.author.uid || '');
   }
 
   public isSelf(author: Author): boolean {

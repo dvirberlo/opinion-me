@@ -1,6 +1,6 @@
 import * as firebase from '@firebase/testing';
 import { USERS_PATH } from '../../src/app/constants/firestore';
-import { User } from '../../src/app/models/user';
+import { UserConverter, UserNow } from '../../src/app/models/user';
 import {
   anotherUid,
   clearDB,
@@ -10,7 +10,7 @@ import {
   setupUserDB,
 } from './helper';
 
-const dummyUser = User.now('test', 'test', '');
+const dummyUser = UserNow('test', 'test', '');
 
 after(async () => {
   await clearDB();
@@ -31,7 +31,7 @@ describe('Users collection tests', () => {
     const testDoc = db
       .collection(USERS_PATH)
       .doc(selfUid)
-      .withConverter(User.converter);
+      .withConverter(UserConverter);
     await firebase.assertSucceeds(testDoc.set(dummyUser));
   });
 
@@ -39,7 +39,7 @@ describe('Users collection tests', () => {
     const db = await setupUserDB();
     const testDoc = db.collection(USERS_PATH).doc(selfUid);
     for (const docObject of await getOneMissingFieldCombinations(
-      User.converter.toFirestore(selfUser)
+      UserConverter.toFirestore(selfUser)
     ))
       await firebase.assertFails(testDoc.set(docObject));
   });
@@ -54,7 +54,7 @@ describe('Users collection tests', () => {
     const testDoc = db
       .collection(USERS_PATH)
       .doc(anotherUid)
-      .withConverter(User.converter);
+      .withConverter(UserConverter);
     await firebase.assertFails(testDoc.set(dummyUser));
   });
 });

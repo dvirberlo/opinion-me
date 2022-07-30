@@ -11,7 +11,7 @@ import {
 import { POSTS_ORDER, POSTS_PATH } from '../constants/firestore';
 import { MAX_POSTS_PER_REQUEST } from '../constants/post';
 import { Doc } from '../models/firestore';
-import { Post } from '../models/post';
+import { Post, PostConverter } from '../models/post';
 import { CursorReader, readDoc } from './firestore-tools';
 
 @Injectable({
@@ -26,7 +26,7 @@ export class PostsService {
       POSTS_PATH,
       POSTS_ORDER,
       MAX_POSTS_PER_REQUEST,
-      Post.converter,
+      PostConverter,
       'posts-reader'
     );
   public getPostByTagReader = (tag: string) => {
@@ -36,7 +36,7 @@ export class PostsService {
       POSTS_PATH,
       { field: tagField, direction: 'desc' },
       MAX_POSTS_PER_REQUEST,
-      Post.converter,
+      PostConverter,
       'posts-by-tag-reader-' + tag,
       [where(tagField, '>', 0)]
     );
@@ -44,7 +44,7 @@ export class PostsService {
 
   public getPost = (uid: string) =>
     new Promise<Post>((resolve, reject) => {
-      readDoc<Post>(doc(this.firestore, POSTS_PATH, uid), Post.converter)
+      readDoc<Post>(doc(this.firestore, POSTS_PATH, uid), PostConverter)
         .then((snap) => {
           const data = snap.data();
           if (data) return resolve(data);
@@ -55,13 +55,13 @@ export class PostsService {
 
   public addPost = (post: Post): Promise<DocumentReference<Post>> =>
     addDoc(
-      collection(this.firestore, POSTS_PATH).withConverter(Post.converter),
+      collection(this.firestore, POSTS_PATH).withConverter(PostConverter),
       post
     );
 
   public reactionUpdate = (post: Doc<Post>): Promise<void> =>
     setDoc(
-      doc(this.firestore, POSTS_PATH, post.id).withConverter(Post.converter),
+      doc(this.firestore, POSTS_PATH, post.id).withConverter(PostConverter),
       post.data
     );
 }

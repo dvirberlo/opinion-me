@@ -4,10 +4,13 @@ import {
   PROFILES_PATH,
   USERS_PATH,
 } from '../../src/app/constants/firestore';
-import { Post } from '../../src/app/models/post';
-import { Author, Profile } from '../../src/app/models/profile';
-import { Reply } from '../../src/app/models/replies';
-import { User } from '../../src/app/models/user';
+import { PostNow } from '../../src/app/models/post';
+import { ReplyNow } from '../../src/app/models/replies';
+import {
+  AuthorFromUser,
+  ProfileFromUser,
+  UserNow,
+} from '../../src/app/models/user';
 
 type CustomCheckers = {
   get: string;
@@ -174,8 +177,10 @@ const isRecent = (timeFieldPath: string) =>
 const recentCreateAt = isRecent('request.resource.data.createAt');
 const recentDate = isRecent('request.resource.data.date');
 
+const dummyUser = UserNow('asd', 'name', '');
+
 const users = generateRuleAndFunctions(
-  new User(123, 'name', 'asd', ''),
+  dummyUser,
   'users',
   USERS_PATH,
   {
@@ -193,7 +198,7 @@ const postReactionsUpdated =
   'postReactionsUpdated(resource.data, request.resource.data, request.auth)';
 
 const profiles = generateRuleAndFunctions(
-  new Profile('name', 'asd', 1000000),
+  ProfileFromUser(dummyUser),
   'profiles',
   PROFILES_PATH,
   {
@@ -206,7 +211,7 @@ const profiles = generateRuleAndFunctions(
   'uid'
 );
 const posts = generateRuleAndFunctions(
-  Post.now('test', new Author('123', 'name', ''), {}, 'ttt'),
+  PostNow('test', AuthorFromUser(dummyUser, '123'), {}, 'ttt'),
   'posts',
   POSTS_PATH,
   {
@@ -226,7 +231,7 @@ const replyNotVoted =
   'repliesVoteNotUpdated(resource.data, request.resource.data)';
 const replyVoteEmpty = 'repliesVoteIsEmpty(request.resource.data)';
 const replies = generateRuleAndFunctions(
-  Reply.now(new Author('123', 'name', ''), 'ttt'),
+  ReplyNow(AuthorFromUser(dummyUser, '123'), 'ttt'),
   'replies',
   // use {postId} since it is a sub-match of '/posts/{postId}' match
   getRepliesPath('{postId}'),
