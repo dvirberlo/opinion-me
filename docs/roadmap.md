@@ -29,7 +29,6 @@ This list is not ordered by priority nor importance.
   - E2E
 - separate firebase-admin enabled server for post and replies filtering
 - search posts by tags
-- ditch classes and use interfaces instead, to avoid the complicated FireConverter
 - use transaction for votes and reactions
 
 ### Maybe?
