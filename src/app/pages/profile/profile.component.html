@@ -3,7 +3,7 @@
     <mat-card *ngIf="this.profile !== undefined">
       <div fxLayout="column" fxLayoutAlign="space-around center">
         <picture>
-          <source [srcset]="this.profile.data.displayName" />
+          <source [srcset]="this.profile.data.photoURL" />
           <source srcset="/assets/svg_icons/account_circle.svg" />
           <img
             class="profilePhoto my-2"
