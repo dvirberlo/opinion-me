@@ -4,11 +4,11 @@ import {
   doc,
   DocumentReference,
   Firestore,
-  onSnapshot,
   setDoc,
 } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 import { PROFILES_PATH, USERS_PATH } from '../constants/firestore';
-import { FireCache } from '../models/firestore';
+import { Doc, FireCache } from '../models/firestore';
 import {
   Author,
   AuthorFromUser,
@@ -26,26 +26,28 @@ export class UserService {
   public user: User | undefined;
   public author: Author | undefined;
   private uid: string | undefined;
+  public $user: Observable<Doc<User> | undefined>;
 
   constructor(private firestore: Firestore, private auth: Auth) {
-    this.auth.onAuthStateChanged((user) => {
-      // calls to update user doc ref listener if uid changed
-      if (this.uid === user?.uid) return;
-      this.uid = user?.uid;
-      this.uidChanged(user);
+    this.$user = new Observable<Doc<User> | undefined>((subscriber) => {
+      this.auth.onAuthStateChanged((user) => {
+        if (user) {
+          this.uid = user.uid;
+          this.getUserFromDB(user).then((userDoc) => {
+            this.verifyProfileCreated(user.uid, userDoc);
+            this.user = userDoc;
+            this.author = AuthorFromUser(userDoc, user.uid);
+            subscriber.next(new Doc<User>(user.uid, userDoc));
+          });
+        } else {
+          this.uid = undefined;
+          this.user = undefined;
+          this.author = undefined;
+          subscriber.next(undefined);
+        }
+      });
     });
   }
-
-  private uidChanged = async (user: AuthUser | null) => {
-    if (user === null) {
-      this.user = undefined;
-      return;
-    }
-    // updates the doc ref and listen for DB changes
-    this.getUserFromDB(user).then((userDoc) =>
-      this.verifyProfileCreated(user.uid, userDoc)
-    );
-  };
 
   private getUserFromDB = async (user: AuthUser) => {
     const userRef = doc(this.firestore, USERS_PATH, user.uid).withConverter(
@@ -56,12 +58,6 @@ export class UserService {
       UserConverter,
       FireCache.Server
     );
-    // listens to updates and apply to user property
-    onSnapshot(userRef, (observer) => {
-      this.user = observer.data();
-      console.log(observer.data());
-      this.author = this.user ? AuthorFromUser(this.user, user.uid) : undefined;
-    });
     // creates new user if does not exists yet
     if (!userSnap.exists()) {
       const userDoc = await this.createNewUser(user, userRef);
@@ -111,4 +107,19 @@ export class UserService {
         })
         .catch(reject);
     });
+
+  public updateUser = (user: Doc<User>): Promise<void[]> => {
+    const userRef = doc(this.firestore, USERS_PATH, user.id).withConverter(
+      UserConverter
+    );
+    const profileRef = doc(
+      this.firestore,
+      PROFILES_PATH,
+      user.id
+    ).withConverter(ProfileConverter);
+    return Promise.all([
+      setDoc(userRef, user.data),
+      setDoc(profileRef, ProfileFromUser(user.data)),
+    ]);
+  };
 }

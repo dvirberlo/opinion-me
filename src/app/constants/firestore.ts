@@ -5,6 +5,7 @@ export const CLIENT_VERSION: number = 3;
 export const INFO_PATH: string = 'info/0';
 
 export const USERS_PATH: string = 'users';
+export const MAX_USERNAME_LENGTH: number = 32;
 
 export const PROFILES_PATH: string = 'profiles';
 

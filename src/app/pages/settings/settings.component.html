@@ -1,0 +1,58 @@
+<mat-card *ngIf="this.selfUser && this.formGroup" class="container">
+  <mat-card-title i18n="@@SettingsTitle">Settings</mat-card-title>
+  <mat-card>
+    <mat-card-subtitle i18n="@@EditProfileTitle"
+      >Edit Profile</mat-card-subtitle
+    >
+    <mat-card-content>
+      <form [formGroup]="this.formGroup" fxLayout="column">
+        <mat-form-field appearance="outline">
+          <mat-label i18n="@@UsernameInputLabel">Username</mat-label>
+          <input
+            formControlName="displayName"
+            matInput
+            [maxlength]="this.MAX_USER_NAME_LENGTH"
+          />
+          <mat-error
+            *ngIf="this.displayName?.touched && this.displayName?.invalid"
+            i18n="@@UsernameValidError"
+            >please enter valid username</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label i18n="@@EmailInputLabel">Email</mat-label>
+          <input formControlName="email" matInput type="email" />
+          <mat-error
+            *ngIf="this.email?.touched && this.email?.invalid"
+            i18n="@@EmailValidError"
+            >please enter valid email</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label i18n="@@PhotoInputLabel">avatar URL</mat-label>
+          <input formControlName="photoURL" matInput type="url" />
+          <mat-error
+            *ngIf="this.photoURL?.touched && this.photoURL?.invalid"
+            i18n="@@PhotoValidError"
+            >please enter valid photo URL</mat-error
+          >
+        </mat-form-field>
+        <button
+          type="submit"
+          fxFlex.xs="1 0 auto"
+          mat-raised-button
+          color="primary"
+          (click)="this.saveEdits()"
+          [disabled]="this.formGroup.invalid"
+          i18n="@@SaveButton"
+        >
+          Save
+        </button>
+        <span i18n="@@ProfileEditDetails" class="mt-1 text-center">
+          Note: Edited details of your profile will affect only future posts and
+          comments.
+        </span>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</mat-card>

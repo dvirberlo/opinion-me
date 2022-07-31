@@ -7,6 +7,7 @@ import { NewPostComponent } from './pages/new-post/new-post.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { PostComponent } from './pages/post/post.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { SettingsComponent } from './pages/settings/settings.component';
 import { TagsComponent } from './pages/tags/tags.component';
 
 const routes: Routes = [
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: paths.newPost, component: NewPostComponent },
   { path: paths.profile + '/:id', component: ProfileComponent },
   { path: paths.tags + '/:id', component: TagsComponent },
+  { path: paths.settings, component: SettingsComponent },
   // make sure leave this last in the list because appearently the order here matters
   { path: '**', component: PageNotFoundComponent },
 ];

@@ -84,4 +84,6 @@ export class SnackbarService {
         duration: 0,
       }
     );
+  public profileUpdated = () =>
+    this.success($localize`:@@ProfileUpdatedMessage:Profile updated!`);
 }
