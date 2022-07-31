@@ -19,11 +19,6 @@ This list is not ordered by priority nor importance.
 
 ## Technical tasks
 
-- create reusable components
-
-  - login component for new-post and settings pages
-  - profile picture component
-
 - use Observable<> where it can fit
 - more and better tests
   - DB
