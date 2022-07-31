@@ -56,3 +56,6 @@
     </mat-card-content>
   </mat-card>
 </mat-card>
+<div *ngIf="!this.selfUser && !this.formGroup">
+  <app-page-not-found></app-page-not-found>
+</div>
