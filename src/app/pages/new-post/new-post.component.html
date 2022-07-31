@@ -89,3 +89,9 @@
     </div>
   </form>
 </div>
+<div *ngIf="this.formGroup === undefined" class="container">
+  <h2 i18n="@@LoginBeforeNewPost" class="text-center">
+    Please login before creating new posts
+  </h2>
+  <app-login-buttons></app-login-buttons>
+</div>

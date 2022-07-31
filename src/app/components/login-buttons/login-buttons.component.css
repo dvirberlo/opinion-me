@@ -1,0 +1,12 @@
+.provider-icon {
+  height: 1em;
+  width: auto;
+  display: inline;
+  vertical-align: middle;
+}
+
+.provider-btn {
+  width: 95%;
+  max-width: 300px;
+  padding-block: 7px;
+}

@@ -6,7 +6,7 @@ import {
   Firestore,
   setDoc,
 } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Observable, shareReplay } from 'rxjs';
 import { PROFILES_PATH, USERS_PATH } from '../constants/firestore';
 import { Doc, FireCache } from '../models/firestore';
 import {
@@ -46,7 +46,7 @@ export class UserService {
           subscriber.next(undefined);
         }
       });
-    });
+    }).pipe(shareReplay(1));
   }
 
   private getUserFromDB = async (user: AuthUser) => {

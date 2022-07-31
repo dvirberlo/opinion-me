@@ -4,11 +4,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Router } from '@angular/router';
-import { map, Observable, startWith } from 'rxjs';
+import { map, Observable, startWith, Subscription } from 'rxjs';
 import { paths } from 'src/app/constants/paths';
 import { MAX_POST_LENGTH, MAX_POST_TITLE_LENGTH } from 'src/app/constants/post';
+import { Doc } from 'src/app/models/firestore';
 import { PostTagsNow } from 'src/app/models/post';
 import { Tag, TagsList } from 'src/app/models/tags';
+import { User } from 'src/app/models/user';
 import { PostsService } from 'src/app/services/posts.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { UserService } from 'src/app/services/user.service';
@@ -29,6 +31,7 @@ export class NewPostComponent implements OnInit {
   public tagsInput: Set<Tag> = new Set<Tag>();
   public separatorKeysCodes: number[] = [ENTER, COMMA];
   public filteredTags?: Observable<string[]>;
+  private userSub?: Subscription;
 
   @ViewChild('tagInput') tagInputElement?: ElementRef<HTMLInputElement>;
 
@@ -51,7 +54,14 @@ export class NewPostComponent implements OnInit {
   public MAX_POST_LENGTH = MAX_POST_LENGTH;
 
   ngOnInit(): void {
-    if (this.userService.user === undefined) this.snackbarService.pleaseLogin();
+    this.userSub = this.userService.$user.subscribe((user) =>
+      this.initializeForm(user)
+    );
+  }
+
+  private initializeForm = (user: Doc<User> | undefined) => {
+    if (user === undefined) return;
+    this.userSub?.unsubscribe();
     this.formGroup = this.formBuilder.group({
       [FORM_FIELDS.title]: [
         '',
@@ -77,7 +87,7 @@ export class NewPostComponent implements OnInit {
         startWith(null),
         map((tag) => this._filter(tag))
       );
-  }
+  };
 
   public send = (): void => {
     if (this.formGroup === undefined) return;

@@ -17,6 +17,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ButtomPanelComponent } from './components/buttom-panel/buttom-panel.component';
 import { HeaderComponent } from './components/header/header.component';
+import { LoginButtonsComponent } from './components/login-buttons/login-buttons.component';
 import { PostViewComponent } from './components/post-view/post-view.component';
 import { ReplisViewComponent } from './components/replies-view/replies-view.component';
 import { ReplyDialogComponent } from './components/reply-dialog/reply-dialog.component';
@@ -48,6 +49,7 @@ import { TagsComponent } from './pages/tags/tags.component';
     ProfileComponent,
     TagsComponent,
     SettingsComponent,
+    LoginButtonsComponent,
   ],
   imports: [
     provideFirebaseApp(() => initializeApp(environment.firebase)),
