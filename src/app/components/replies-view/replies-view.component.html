@@ -16,17 +16,10 @@
       [routerLink]="['/', paths.profile, replyDoc.data.author.uid]"
     >
       <!-- profile picture -->
-      <picture>
-        <source [srcset]="replyDoc.data.author.photoURL" />
-        <source srcset="/assets/svg_icons/account_circle.svg" />
-        <img
-          class="replyProfilePhoto"
-          i18n-title
-          title="User photo"
-          alt="User photo"
-          onerror="this.onerror=null;this.parentElement.firstElementChild.srcset='/assets/svg_icons/account_circle.svg';"
-        />
-      </picture>
+      <app-avatar
+        [photoURL]="replyDoc.data.author.photoURL || ''"
+        imgClasses="replyProfileAvatar"
+      ></app-avatar>
       <!-- profile name and reply date -->
       <span>
         {{ replyDoc.data.author.displayName }} •

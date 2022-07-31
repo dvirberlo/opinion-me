@@ -2,17 +2,10 @@
   <div *ngSwitchCase="true">
     <mat-card *ngIf="this.profile !== undefined">
       <div fxLayout="column" fxLayoutAlign="space-around center">
-        <picture>
-          <source [srcset]="this.profile.data.photoURL" />
-          <source srcset="/assets/svg_icons/account_circle.svg" />
-          <img
-            class="profilePhoto my-2"
-            i18n-title
-            title="User photo"
-            alt="User photo"
-            onerror="this.onerror=null;this.parentElement.firstElementChild.srcset='/assets/svg_icons/account_circle.svg';"
-          />
-        </picture>
+        <app-avatar
+          [photoURL]="this.profile.data.photoURL || ''"
+          imgClasses="profilePageAvatar"
+        ></app-avatar>
         <mat-card-title class="my-2">{{
           this.profile.data.displayName
         }}</mat-card-title>

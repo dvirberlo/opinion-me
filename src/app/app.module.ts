@@ -15,6 +15,7 @@ import { TimeagoModule } from 'ngx-timeago';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AvatarComponent } from './components/avatar/avatar.component';
 import { ButtomPanelComponent } from './components/buttom-panel/buttom-panel.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoginButtonsComponent } from './components/login-buttons/login-buttons.component';
@@ -50,6 +51,7 @@ import { TagsComponent } from './pages/tags/tags.component';
     TagsComponent,
     SettingsComponent,
     LoginButtonsComponent,
+    AvatarComponent,
   ],
   imports: [
     provideFirebaseApp(() => initializeApp(environment.firebase)),

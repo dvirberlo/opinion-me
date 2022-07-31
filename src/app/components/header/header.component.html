@@ -61,17 +61,10 @@
       [matMenuTriggerFor]="userMenu"
       mat-icon-button
     >
-      <picture>
-        <source [srcset]="this.userService.user?.photoURL" />
-        <source srcset="/assets/svg_icons/account_circle.svg" />
-        <img
-          id="userPhoto"
-          i18n-title
-          title="User photo"
-          alt="User photo"
-          onerror="this.onerror=null;this.parentElement.firstElementChild.srcset='/assets/svg_icons/account_circle.svg';"
-        />
-      </picture>
+      <app-avatar
+        photoURL="{{ (this.userService.$user | async)?.data?.photoURL }}"
+        imgClasses="headerAvatar"
+      ></app-avatar>
     </button>
     <mat-menu #userMenu="matMenu">
       <button

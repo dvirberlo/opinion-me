@@ -7,16 +7,10 @@
       [routerLink]="['/', paths.profile, this.post.data.author.uid]"
       class="linkCursor"
     >
-      <picture>
-        <source [srcset]="this.post.data.author.photoURL" />
-        <source srcset="/assets/svg_icons/account_circle.svg" />
-        <img
-          class="postProfilePhoto"
-          i18n-title
-          title="User photo"
-          alt="User photo"
-          onerror="this.onerror=null;this.parentElement.firstElementChild.srcset='/assets/svg_icons/account_circle.svg';"
-        /> </picture
+      <app-avatar
+        [photoURL]="this.post.data.author.photoURL || ''"
+        imgClasses="postProfileAvatar"
+      ></app-avatar
       >{{ this.post.data.author.displayName }} •
       {{ this.post.data.date * 1000 | timeago }}</mat-card-subtitle
     >
