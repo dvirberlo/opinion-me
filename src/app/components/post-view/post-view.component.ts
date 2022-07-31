@@ -110,15 +110,12 @@ export class PostViewComponent implements OnInit {
     if (typeof this.userService.author?.uid !== 'string')
       return this.snackbarService.pleaseLogin();
     if (this.post === undefined) return;
-    console.log(this.post.data);
     ReactionsToggleReaction(
       this.post.data.reactions,
       reaction,
       this.userService.author.uid
     );
-    console.log(this.post.data);
     this.postsService.reactionUpdate(structuredClone(this.post));
-    console.log(this.post.data);
   };
   public hasReacted = (reaction: Reaction): boolean => {
     if (
