@@ -4,9 +4,6 @@ This list is not ordered by priority nor importance.
 
 ## Features
 
-- create settings page
-  - user image
-  - user name
 - create custom theme
 - more authentication options
   - microsoft
@@ -22,6 +19,8 @@ This list is not ordered by priority nor importance.
 
 ## Technical tasks
 
+- create reusable login component
+  - use for new-post and settings
 - use Observable<> where it can fit
 - more and better tests
   - DB
