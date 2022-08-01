@@ -10,7 +10,9 @@ import { paths } from '../constants/paths';
 export class SnackbarService {
   constructor(private snackbar: MatSnackBar, private router: Router) {}
 
-  private defaultDuration: number = 5000;
+  private defaults: MatSnackBarConfig<any> = {
+    duration: 1000,
+  };
 
   private withIcon = (
     message: string,
@@ -18,11 +20,11 @@ export class SnackbarService {
     config?: MatSnackBarConfig
   ) => {
     this.snackbar.openFromComponent(SnackbarComponent, {
+      ...this.defaults,
       data: {
         message,
         icon,
       },
-      duration: this.defaultDuration,
       ...config,
     });
   };
@@ -45,9 +47,7 @@ export class SnackbarService {
     action?: { label: string; action: () => void }
   ) => {
     this.snackbar
-      .open(message, action?.label, {
-        duration: this.defaultDuration,
-      })
+      .open(message, action?.label, this.defaults)
       .onAction()
       .subscribe(() => action?.action());
   };
