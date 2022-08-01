@@ -6,6 +6,7 @@
     <mat-card-subtitle
       [routerLink]="['/', paths.profile, this.post.data.author.uid]"
       class="linkCursor multilineText words-break"
+      style="display: block !important"
     >
       <app-avatar
         [photoURL]="this.post.data.author.photoURL || ''"
