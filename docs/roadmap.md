@@ -9,6 +9,10 @@ This list is not ordered by priority nor importance.
   - microsoft
   - github
 - add more tags to the list
+- implement explore tab
+  - search bar by tags
+  - list of tags
+- implement notifications tab
 - create logo
 
 ### Maybe?
