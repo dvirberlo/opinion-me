@@ -1,22 +1,22 @@
-.headerAvatar {
+.header {
   width: auto;
   height: 100%;
   border-radius: 50%;
   vertical-align: baseline;
 }
-.postProfileAvatar {
+.postProfile {
   width: auto;
   height: 1.5em;
   border-radius: 50%;
   margin-inline-end: 0.5rem;
 }
-.replyProfileAvatar {
+.replyProfile {
   width: auto;
   height: 1.2em;
   border-radius: 50%;
   margin-inline-end: 0.25rem;
 }
-.profilePageAvatar {
+.profilePage {
   width: auto;
   height: 15em;
   border-radius: 50%;

@@ -7,7 +7,12 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class AvatarComponent implements OnInit {
   @Input() public photoURL: string = '';
-  @Input() public imgClasses: string = '';
+  @Input() public imgClasses:
+    | 'header'
+    | 'postProfile'
+    | 'replyProfile'
+    | 'profilePage'
+    | '' = '';
 
   constructor() {}
 

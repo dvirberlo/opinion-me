@@ -12,13 +12,13 @@
   <!-- div for each reply -->
   <div class="replyCard my-1" *ngFor="let replyDoc of this.cursorReader?.docs">
     <mat-card-subtitle
-      class="ms-1 my-1 linkCursor"
+      class="ms-1 my-1 linkCursor multilineText words-break"
       [routerLink]="['/', paths.profile, replyDoc.data.author.uid]"
     >
       <!-- profile picture -->
       <app-avatar
         [photoURL]="replyDoc.data.author.photoURL || ''"
-        imgClasses="replyProfileAvatar"
+        imgClasses="replyProfile"
       ></app-avatar>
       <!-- profile name and reply date -->
       <span>

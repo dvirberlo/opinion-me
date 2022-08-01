@@ -5,11 +5,11 @@
     }}</mat-card-title>
     <mat-card-subtitle
       [routerLink]="['/', paths.profile, this.post.data.author.uid]"
-      class="linkCursor"
+      class="linkCursor multilineText words-break"
     >
       <app-avatar
         [photoURL]="this.post.data.author.photoURL || ''"
-        imgClasses="postProfileAvatar"
+        imgClasses="postProfile"
       ></app-avatar
       >{{ this.post.data.author.displayName }} •
       {{ this.post.data.date * 1000 | timeago }}</mat-card-subtitle
@@ -34,15 +34,15 @@
   <!-- reactions -->
   <mat-card-actions
     *ngIf="!this.previewMode"
-    class="mb-0 mt-2 mx-0 p-0"
-    fxLayout="row"
+    class="m-0 p-0"
+    fxLayout="row wrap"
     fxLayoutAlign="start center"
   >
     <div *ngFor="let reaction of this.ReactionList">
       <button
         *ngIf="ReactionsHasReactions(this.post.data.reactions, reaction)"
         mat-stroked-button
-        class="mx-1"
+        class="m-1"
         [ngClass]="
           'reaction-btn-' +
           reaction +
