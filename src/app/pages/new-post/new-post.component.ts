@@ -83,10 +83,7 @@ export class NewPostComponent implements OnInit {
     });
     this.filteredTags = this.formGroup
       ?.get(FORM_FIELDS.tags)
-      ?.valueChanges.pipe(
-        startWith(null),
-        map((tag) => this._filter(tag))
-      );
+      ?.valueChanges.pipe(map((tag) => this._filter(tag)));
   };
 
   public send = (): void => {
@@ -135,9 +132,8 @@ export class NewPostComponent implements OnInit {
     this.formGroup?.get(FORM_FIELDS.tags)?.setValue(null);
   };
   private _filter = (value: string | null): string[] => {
-    // shows all unselected tags when empty
-    if (!value)
-      return TagsList.filter((tag) => !this.tagsInput.has(tag as Tag));
+    // don't show if null or short
+    if (!value || value.length < 1) return [];
     return TagsList.filter(
       (tag) =>
         !this.tagsInput.has(tag as Tag) &&
