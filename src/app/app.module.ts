@@ -24,6 +24,7 @@ import { ReplisViewComponent } from './components/replies-view/replies-view.comp
 import { ReplyDialogComponent } from './components/reply-dialog/reply-dialog.component';
 import { SnackbarComponent } from './components/snackbar/snackbar.component';
 import { MaterialModule } from './material.module';
+import { ExploreComponent } from './pages/explore/explore.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { NewPostComponent } from './pages/new-post/new-post.component';
@@ -52,6 +53,7 @@ import { TagsComponent } from './pages/tags/tags.component';
     SettingsComponent,
     LoginButtonsComponent,
     AvatarComponent,
+    ExploreComponent,
   ],
   imports: [
     provideFirebaseApp(() => initializeApp(environment.firebase)),

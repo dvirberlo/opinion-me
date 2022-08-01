@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { paths } from './constants/paths';
+import { ExploreComponent } from './pages/explore/explore.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { NewPostComponent } from './pages/new-post/new-post.component';
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: paths.profile + '/:id', component: ProfileComponent },
   { path: paths.tags + '/:id', component: TagsComponent },
   { path: paths.settings, component: SettingsComponent },
+  { path: paths.explore, component: ExploreComponent },
   // make sure leave this last in the list because appearently the order here matters
   { path: '**', component: PageNotFoundComponent },
 ];

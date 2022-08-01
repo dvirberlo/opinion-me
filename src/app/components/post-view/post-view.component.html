@@ -1,12 +1,11 @@
 <mat-card class="my-1 postCard" *ngIf="this.post !== undefined">
   <mat-card-header>
-    <mat-card-title class="words-break">{{
+    <mat-card-title class="words-break d-inline-block">{{
       this.post.data.title
     }}</mat-card-title>
     <mat-card-subtitle
       [routerLink]="['/', paths.profile, this.post.data.author.uid]"
-      class="linkCursor multilineText words-break"
-      style="display: block !important"
+      class="linkCursor multilineText words-break d-block"
     >
       <app-avatar
         [photoURL]="this.post.data.author.photoURL || ''"
@@ -18,7 +17,7 @@
   </mat-card-header>
   <!-- content -->
   <mat-card-content class="my-1">
-    <span class="multilineText words-break">
+    <span class="multilineText words-break d-inline-block">
       {{ this.previewMode ? this.previewContent() : this.post.data.content }}
     </span>
   </mat-card-content>

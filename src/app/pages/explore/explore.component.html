@@ -1,0 +1,21 @@
+<form class="text-center container mt-2">
+  <mat-form-field appearance="fill" class="tagsSearch">
+    <mat-label i18n="@@TagSearchLabel">Search tags</mat-label>
+    <input #searchInput matInput (input)="this.searchChanged()" />
+  </mat-form-field>
+</form>
+<div fxLayout="row wrap" fxLayoutAlign="center">
+  <div *ngFor="let tag of this.filterdTags">
+    <button
+      mat-flat-button
+      class="tagCard m-2 linkCursor text-capitalize text-center"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      [routerLink]="['/', this.paths.tags, tag]"
+    >
+      <span class="multilineText words-break d-block" ngClass.gt-xs="h5">{{
+        tag
+      }}</span>
+    </button>
+  </div>
+</div>

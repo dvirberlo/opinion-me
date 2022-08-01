@@ -16,7 +16,6 @@ mat-toolbar {
 }
 .words-break {
   overflow-wrap: break-word !important;
-  display: inline-block !important;
   word-break: break-word !important;
 }
 .material-symbols-fill,

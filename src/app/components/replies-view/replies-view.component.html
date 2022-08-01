@@ -12,7 +12,7 @@
   <!-- div for each reply -->
   <div class="replyCard my-1" *ngFor="let replyDoc of this.cursorReader?.docs">
     <mat-card-subtitle
-      class="ms-1 my-1 linkCursor multilineText words-break"
+      class="ms-1 my-1 linkCursor multilineText words-break d-inline-block"
       [routerLink]="['/', paths.profile, replyDoc.data.author.uid]"
     >
       <!-- profile picture -->
@@ -27,7 +27,7 @@
       </span>
     </mat-card-subtitle>
     <!-- reply content -->
-    <mat-card-content class="ms-1 mb-0 multilineText words-break">
+    <mat-card-content class="ms-1 mb-0 multilineText words-break d-block">
       {{ replyDoc.data.content }}
     </mat-card-content>
     <!-- reply actions -->
