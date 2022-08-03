@@ -97,6 +97,7 @@ const generateHasOnly = (
     const child = model[key];
     if (
       typeof child === 'object' &&
+      !(child instanceof Set) &&
       !Array.isArray(child) &&
       !ignore.includes(key)
     )
@@ -236,7 +237,7 @@ const replies = generateRuleAndFunctions(
     list: ALWAYS_ALLOW,
     create: requireAll(selfAuthorCheck, recentDate, replyVoteEmpty),
     update:
-      'reapliesUpdateCheck(resource.data, request.resource.data, request.auth)',
+      'repliesUpdateValid(resource.data, request.resource.data, request.auth)',
     delete: selfWasAuthorCheck,
   },
   'replyId'

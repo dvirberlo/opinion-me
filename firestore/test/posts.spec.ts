@@ -40,6 +40,26 @@ const adminCreatePost = async (post: PostType) => {
   return postId;
 };
 
+const updateAddReaction = (
+  doc: firebase.firestore.DocumentReference,
+  reaction: Reaction,
+  uid: string
+) =>
+  doc.update({
+    [`reactions.${reaction}`]: firebase.firestore.FieldValue.arrayUnion(
+      uid,
+      uid
+    ),
+  });
+const updateRemoveReaction = (
+  doc: firebase.firestore.DocumentReference,
+  reaction: Reaction,
+  uid: string
+) =>
+  doc.update({
+    [`reactions.${reaction}`]: firebase.firestore.FieldValue.arrayRemove(uid),
+  });
+
 after(async () => {
   await clearDB();
 });
@@ -96,53 +116,43 @@ describe('Posts collection tests', () => {
   it('reaction should be allowed', async () => {
     const postId = await adminCreatePost(structuredClone(otherPost));
 
-    const reacted = structuredClone(otherPost);
-    Reactions.react(reacted.reactions, Reaction.like, selfUid);
     const db = await setupUserDB();
-    const testDoc = db
-      .collection(POSTS_PATH)
-      .doc(postId)
-      .withConverter(Post.converter);
-    await firebase.assertSucceeds(testDoc.set(reacted));
+    const testDoc = db.collection(POSTS_PATH).doc(postId);
+    await firebase.assertSucceeds(
+      updateAddReaction(testDoc, Reaction.like, selfUid)
+    );
   });
   it('self unreaction should be allowed', async () => {
     const reacted = structuredClone(otherPost);
     Reactions.react(reacted.reactions, Reaction.like, selfUid);
     const postId = await adminCreatePost(structuredClone(otherPost));
 
-    Reactions.unreact(reacted.reactions, Reaction.like, selfUid);
     const db = await setupUserDB();
-    const testDoc = db
-      .collection(POSTS_PATH)
-      .doc(postId)
-      .withConverter(Post.converter);
-    await firebase.assertSucceeds(testDoc.set(reacted));
+    const testDoc = db.collection(POSTS_PATH).doc(postId);
+    await firebase.assertSucceeds(
+      updateRemoveReaction(testDoc, Reaction.like, selfUid)
+    );
   });
 
   it("other's reaction should be disallowed", async () => {
     const postId = await adminCreatePost(structuredClone(otherPost));
 
-    const reacted = structuredClone(otherPost);
-    Reactions.react(reacted.reactions, Reaction.like, anotherUid);
     const db = await setupUserDB();
-    const testDoc = db
-      .collection(POSTS_PATH)
-      .doc(postId)
-      .withConverter(Post.converter);
-    await firebase.assertFails(testDoc.set(reacted));
+    const testDoc = db.collection(POSTS_PATH).doc(postId);
+    await firebase.assertFails(
+      updateAddReaction(testDoc, Reaction.like, anotherUid)
+    );
   });
   it("other's unreaction should be disallowed", async () => {
     const reacted = structuredClone(otherPost);
     Reactions.react(reacted.reactions, Reaction.like, anotherUid);
     const postId = await adminCreatePost(structuredClone(reacted));
 
-    Reactions.unreact(reacted.reactions, Reaction.like, anotherUid);
     const db = await setupUserDB();
-    const testDoc = db
-      .collection(POSTS_PATH)
-      .doc(postId)
-      .withConverter(Post.converter);
-    await firebase.assertFails(testDoc.set(reacted));
+    const testDoc = db.collection(POSTS_PATH).doc(postId);
+    await firebase.assertFails(
+      updateRemoveReaction(testDoc, Reaction.like, anotherUid)
+    );
   });
 
   it('doubled reaction should be disallowed', async () => {
@@ -172,12 +182,10 @@ describe('Posts collection tests', () => {
     Reactions.react(reacted.reactions, Reaction.dislike, selfUid);
     const postId = await adminCreatePost(structuredClone(reacted));
 
-    Reactions.react(reacted.reactions, Reaction.like, selfUid);
     const db = await setupUserDB();
-    const testDoc = db
-      .collection(POSTS_PATH)
-      .doc(postId)
-      .withConverter(Post.converter);
-    await firebase.assertSucceeds(testDoc.set(reacted));
+    const testDoc = db.collection(POSTS_PATH).doc(postId);
+    await firebase.assertSucceeds(
+      updateAddReaction(testDoc, Reaction.like, selfUid)
+    );
   });
 });

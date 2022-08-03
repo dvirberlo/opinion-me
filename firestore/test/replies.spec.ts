@@ -1,7 +1,12 @@
 import * as firebase from '@firebase/testing';
 import { getRepliesPath, POSTS_PATH } from '../../src/app/constants/firestore';
 import { Post, PostType } from '../../src/app/models/post';
-import { Reply, ReplyType, Vote } from '../../src/app/models/replies';
+import {
+  Reply,
+  ReplyType,
+  Vote,
+  VoteArrName,
+} from '../../src/app/models/replies';
 import {
   anotherAuthor,
   anotherUid,
@@ -49,6 +54,26 @@ const adminCreateReply = async (postId: string, reply: ReplyType) => {
     .set(reply);
   return replyId;
 };
+
+const updateAddVote = (
+  doc: firebase.firestore.DocumentReference,
+  uid: string,
+  voteArr: VoteArrName = 'upvotes'
+) =>
+  doc.update({
+    [`votes.${voteArr}`]: firebase.firestore.FieldValue.arrayUnion(uid),
+    [`votes.${voteArr === 'upvotes' ? 'downvotes' : 'upvotes'}`]:
+      firebase.firestore.FieldValue.arrayRemove(uid),
+  });
+
+const updateRemoveVote = (
+  doc: firebase.firestore.DocumentReference,
+  uid: string,
+  voteArr: VoteArrName = 'upvotes'
+) =>
+  doc.update({
+    [`votes.${voteArr}`]: firebase.firestore.FieldValue.arrayRemove(uid),
+  });
 
 after(async () => {
   await clearDB();
@@ -127,15 +152,22 @@ describe('Replies collection tests', () => {
       structuredClone(anotherReply)
     );
 
+    const db = await setupUserDB();
+    const testDoc = db.collection(getRepliesPath(postId)).doc(replyId);
+    await firebase.assertSucceeds(updateAddVote(testDoc, selfUid, 'upvotes'));
+  });
+  it('remove one vote should be allowed', async () => {
+    const postId = await adminCreatePost(anotherPost);
+
     const voted = structuredClone(anotherReply);
     voted.votes.upvotes.add(selfUid);
+    const replyId = await adminCreateReply(postId, structuredClone(voted));
 
     const db = await setupUserDB();
-    const testDoc = db
-      .collection(getRepliesPath(postId))
-      .doc(replyId)
-      .withConverter(Reply.converter);
-    await firebase.assertSucceeds(testDoc.set(voted));
+    const testDoc = db.collection(getRepliesPath(postId)).doc(replyId);
+    await firebase.assertSucceeds(
+      updateRemoveVote(testDoc, selfUid, 'upvotes')
+    );
   });
   it("one vote after another's vote should be allowed", async () => {
     const postId = await adminCreatePost(anotherPost);
@@ -143,13 +175,9 @@ describe('Replies collection tests', () => {
     voted.votes.upvotes.add(anotherUid);
     const replyId = await adminCreateReply(postId, structuredClone(voted));
 
-    voted.votes.upvotes.add(selfUid);
     const db = await setupUserDB();
-    const testDoc = db
-      .collection(getRepliesPath(postId))
-      .doc(replyId)
-      .withConverter(Reply.converter);
-    await firebase.assertSucceeds(testDoc.set(voted));
+    const testDoc = db.collection(getRepliesPath(postId)).doc(replyId);
+    await firebase.assertSucceeds(updateAddVote(testDoc, selfUid, 'upvotes'));
   });
   it('one non-self vote should be disallowed', async () => {
     const postId = await adminCreatePost(anotherPost);
@@ -158,23 +186,17 @@ describe('Replies collection tests', () => {
       structuredClone(anotherReply)
     );
 
-    const voted = Reply.converter.toFirestore(structuredClone(anotherReply));
-    voted.votes.upvotes.push(anotherUid);
-
     const db = await setupUserDB();
     const testDoc = db.collection(getRepliesPath(postId)).doc(replyId);
-    await firebase.assertFails(testDoc.set(voted));
+    await firebase.assertFails(updateAddVote(testDoc, anotherUid, 'upvotes'));
   });
   it('one author vote should be disallowed', async () => {
     const postId = await adminCreatePost(anotherPost);
     const replyId = await adminCreateReply(postId, structuredClone(selfReply));
 
-    const voted = Reply.converter.toFirestore(structuredClone(selfReply));
-    voted.votes.upvotes.push(selfUid);
-
     const db = await setupUserDB();
     const testDoc = db.collection(getRepliesPath(postId)).doc(replyId);
-    await firebase.assertFails(testDoc.set(voted));
+    await firebase.assertFails(updateAddVote(testDoc, selfUid, 'upvotes'));
   });
 
   it('double vote should be disallowed', async () => {
@@ -223,20 +245,6 @@ describe('Replies collection tests', () => {
     await firebase.assertFails(testDoc.set(voted));
   });
 
-  it('double delete vote should be disallowed', async () => {
-    const postId = await adminCreatePost(anotherPost);
-    const voted = Reply.converter.toFirestore(structuredClone(anotherReply));
-    voted.votes.upvotes.push(selfUid);
-    voted.votes.upvotes.push(anotherUid);
-    const replyId = await adminCreateReply(postId, voted);
-
-    const db = await setupUserDB();
-    const testDoc = db
-      .collection(getRepliesPath(postId))
-      .doc(replyId)
-      .withConverter(Reply.converter);
-    await firebase.assertFails(testDoc.set(structuredClone(anotherReply)));
-  });
   it('double delete different vote should be disallowed', async () => {
     const postId = await adminCreatePost(anotherPost);
     const voted = Reply.converter.toFirestore(structuredClone(anotherReply));
@@ -258,17 +266,10 @@ describe('Replies collection tests', () => {
     voted.votes.upvotes.push(selfUid);
     const replyId = await adminCreateReply(postId, voted);
 
-    const votedSwitch = Reply.converter.toFirestore(
-      structuredClone(anotherReply)
-    );
-    votedSwitch.votes.upvotes.splice(
-      votedSwitch.votes.upvotes.indexOf(selfUid),
-      1
-    );
-    votedSwitch.votes.downvotes.push(selfUid);
     const db = await setupUserDB();
     const testDoc = db.collection(getRepliesPath(postId)).doc(replyId);
-    await firebase.assertSucceeds(testDoc.set(votedSwitch));
+    // updateAddVote switch by default
+    await firebase.assertSucceeds(updateAddVote(testDoc, selfUid, 'upvotes'));
   });
 
   it('create reply with non-empty votes map should be disallowed', async () => {

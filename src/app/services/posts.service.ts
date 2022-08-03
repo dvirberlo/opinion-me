@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
 import {
   addDoc,
+  arrayRemove,
+  arrayUnion,
   collection,
   doc,
   DocumentReference,
   Firestore,
   setDoc,
+  updateDoc,
   where,
 } from '@angular/fire/firestore';
 import { POSTS_ORDER, POSTS_PATH } from '../constants/firestore';
 import { MAX_POSTS_PER_REQUEST } from '../constants/post';
 import { Doc } from '../models/firestore';
-import { Post, PostType } from '../models/post';
+import { Post, PostType, Reaction } from '../models/post';
 import { CursorReader, readDoc } from './firestore-tools';
 
 @Injectable({
@@ -64,4 +67,14 @@ export class PostsService {
       doc(this.firestore, POSTS_PATH, post.id).withConverter(Post.converter),
       post.data
     );
+
+  public updateReaction = (
+    post: Doc<PostType>,
+    reaction: Reaction,
+    uid: string,
+    add: boolean
+  ): Promise<void> =>
+    updateDoc(doc(this.firestore, POSTS_PATH, post.id), {
+      [`reactions.${reaction}`]: add ? arrayUnion(uid) : arrayRemove(uid),
+    });
 }

@@ -45,7 +45,7 @@ service cloud.firestore {
       allow create: if repliesCreateCheck(request.resource.data) &&
         (isSelf(request.resource.data.author.uid, request.auth) && isRecent(request.time, request.resource.data.date) && repliesVoteIsEmpty(request.resource.data));
       allow update: if repliesUpdateCheck(request.resource.data) &&
-        reapliesUpdateCheck(resource.data, request.resource.data, request.auth);
+        repliesUpdateValid(resource.data, request.resource.data, request.auth);
       allow delete: if     isSelf(resource.data.author.uid, request.auth);
     }
 
@@ -134,7 +134,7 @@ service cloud.firestore {
         data.votes.downvotes.toSet().size() == 0;
     }
 
-    function reapliesUpdateCheck(resourceData, requestData, auth){
+    function repliesUpdateValid(resourceData, requestData, auth){
       let upVoted = requestData.votes.upvotes.toSet().hasAny([auth.uid].toSet());
       let downVoted = requestData.votes.downvotes.toSet().hasAny([auth.uid].toSet());
       let votedInBoth = upVoted && downVoted;

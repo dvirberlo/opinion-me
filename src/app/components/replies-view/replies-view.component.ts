@@ -38,18 +38,31 @@ export class ReplisViewComponent implements OnInit {
     });
   };
 
-  public thumbsUp = (reply: Doc<ReplyType>) =>
-    this.vote(reply, (reply) =>
-      Vote.toggleUpvote(reply.data.votes, this.userService.author?.uid || '')
-    );
-  public thumbsDown = (reply: Doc<ReplyType>) =>
-    this.vote(reply, (reply) =>
-      Vote.toggleDownvote(reply.data.votes, this.userService.author?.uid || '')
-    );
-
+  public thumbsUp = (reply: Doc<ReplyType>) => {
+    this.vote(reply, (reply: Doc<ReplyType>, postId: string, uid: string) => {
+      const added = Vote.toggleUpvote(reply.data.votes, uid);
+      const DBfunc = added
+        ? this.repliesService.vote
+        : this.repliesService.unvote;
+      return DBfunc('upvotes', uid, reply, postId);
+    });
+  };
+  public thumbsDown = (reply: Doc<ReplyType>) => {
+    this.vote(reply, (reply: Doc<ReplyType>, postId: string, uid: string) => {
+      const added = Vote.toggleDownvote(reply.data.votes, uid);
+      const DBfunc = added
+        ? this.repliesService.vote
+        : this.repliesService.unvote;
+      return DBfunc('downvotes', uid, reply, postId);
+    });
+  };
   private vote = (
     reply: Doc<ReplyType>,
-    action: (reply: Doc<ReplyType>) => void
+    action: (
+      reply: Doc<ReplyType>,
+      postId: string,
+      uid: string
+    ) => Promise<void>
   ) => {
     if (
       this.userService.author === undefined ||
@@ -57,11 +70,12 @@ export class ReplisViewComponent implements OnInit {
       this.postId === undefined
     )
       return this.snackbarService.pleaseLogin();
-    action(reply);
-    this.repliesService.voteUpdated(reply, this.postId).catch((err: Error) => {
-      this.snackbarService.errorTryAgain();
-      console.error(err);
-    });
+    action(reply, this.postId, this.userService.author.uid).catch(
+      (err: Error) => {
+        this.snackbarService.errorTryAgain();
+        console.error(err);
+      }
+    );
   };
 
   public hasUpvoted(reply: ReplyType): boolean {

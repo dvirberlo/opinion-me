@@ -1,6 +1,6 @@
 import { dateNow, FireConvertTo } from './firestore';
-import { AuthorType } from './user';
 import { Tag } from './tags';
+import { AuthorType } from './user';
 
 export type TagsMap = { [key in Tag]?: number };
 
@@ -44,9 +44,13 @@ export class Reactions {
     reactions: ReactionsType,
     reaction: Reaction,
     userId: string
-  ) => {
+  ): boolean => {
     const deleted = reactions[reaction].delete(userId);
-    if (!deleted) reactions[reaction].add(userId);
+    if (!deleted) {
+      reactions[reaction].add(userId);
+      return true;
+    }
+    return false;
   };
   public static getReactionCount = (
     reactions: ReactionsType,

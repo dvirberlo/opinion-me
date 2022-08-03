@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
 import {
   addDoc,
+  arrayRemove,
+  arrayUnion,
   collection,
   doc,
   DocumentReference,
   Firestore,
   setDoc,
+  updateDoc,
 } from '@angular/fire/firestore';
 import { getRepliesPath, REPLIES_ORDER } from '../constants/firestore';
 import { MAX_REPLIES_PER_REQUEST } from '../constants/reply';
 import { Doc } from '../models/firestore';
-import { Reply, ReplyType } from '../models/replies';
+import { Reply, ReplyType, VoteArrName } from '../models/replies';
 import { CursorReader } from './firestore-tools';
 
 @Injectable({
@@ -47,4 +50,25 @@ export class RepliesService {
       ),
       reply.data
     );
+
+  public vote = (
+    voteArr: VoteArrName,
+    uid: string,
+    reply: Doc<ReplyType>,
+    postId: string
+  ): Promise<void> =>
+    updateDoc(doc(this.firestore, getRepliesPath(postId), reply.id), {
+      [`votes.${voteArr}`]: arrayUnion(uid),
+      [`votes.${voteArr === 'upvotes' ? 'downvotes' : 'upvotes'}`]:
+        arrayRemove(uid),
+    });
+  public unvote = (
+    voteArr: VoteArrName,
+    uid: string,
+    reply: Doc<ReplyType>,
+    postId: string
+  ): Promise<void> =>
+    updateDoc(doc(this.firestore, getRepliesPath(postId), reply.id), {
+      [`votes.${voteArr}`]: arrayRemove(uid),
+    });
 }
