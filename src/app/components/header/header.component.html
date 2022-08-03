@@ -11,14 +11,13 @@
     >Opinion Me</span
   >
 
-  <div
-    ngClass.xs="d-none"
-    fxFlex="60"
-    fxLayoutAlign="center center"
-    [routerLinkActive]="['mat-accent']"
-    [routerLinkActiveOptions]="{ exact: true }"
-  >
-    <button mat-button [routerLink]="paths.home">
+  <div ngClass.xs="d-none" fxFlex="60" fxLayoutAlign="center center">
+    <button
+      mat-button
+      [routerLink]="paths.home"
+      [routerLinkActive]="['mat-accent']"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
       <div fxLayout="row" fxLayoutAlign="none center">
         <span class="material-symbols-rounded">home</span>
         <span i18n="@@HomeButtonText">Home</span>
