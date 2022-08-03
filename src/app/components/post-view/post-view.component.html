@@ -22,15 +22,17 @@
     </span>
   </mat-card-content>
   <!-- tags -->
-  <mat-chip-list *ngIf="!this.previewMode" class="example-chip">
-    <mat-chip
-      *ngFor="let tag of this.tagsList"
-      [routerLink]="['/', this.paths.tags, tag]"
-      class="linkCursor"
-    >
-      {{ tag }}
-    </mat-chip>
-  </mat-chip-list>
+  <div class="mb-1" *ngIf="!this.previewMode">
+    <mat-chip-list>
+      <mat-chip
+        *ngFor="let tag of this.tagsList"
+        [routerLink]="['/', this.paths.tags, tag]"
+        class="linkCursor"
+      >
+        {{ tag }}
+      </mat-chip>
+    </mat-chip-list>
+  </div>
   <!-- reactions -->
   <mat-card-actions
     *ngIf="!this.previewMode"
@@ -102,7 +104,7 @@
   <button
     *ngIf="this.previewMode"
     mat-raised-button
-    color="primary"
+    color="accent"
     (click)="this.previewMode = false"
     class="mt-1"
   >

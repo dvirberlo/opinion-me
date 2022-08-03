@@ -1,7 +1,7 @@
 <div *ngIf="this.formGroup !== undefined">
   <form [formGroup]="this.formGroup" fxLayout="column" class="container mt-2">
     <h1 class="text-center" i18n>New Post</h1>
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" color="accent">
       <mat-label i18n="@@TitleInputPlaceholder">Title...</mat-label>
       <input
         formControlName="title"
@@ -18,7 +18,7 @@
         >please enter valid title</mat-error
       >
     </mat-form-field>
-    <mat-form-field appearance="fill" fxFlex="1 1 auto">
+    <mat-form-field appearance="fill" fxFlex="1 1 auto" color="accent">
       <textarea
         [maxlength]="this.MAX_POST_LENGTH"
         matInput
@@ -40,7 +40,7 @@
         >please enter valid content</mat-error
       >
     </mat-form-field>
-    <mat-form-field appearance="fill" fxFlex="1 1 auto">
+    <mat-form-field appearance="fill" fxFlex="1 1 auto" color="accent">
       <mat-label>Tags</mat-label>
       <mat-chip-list #chipList aria-label="Tag selection">
         <mat-chip

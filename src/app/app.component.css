@@ -1,8 +1,13 @@
 .toolbar-padding {
-  padding-top: 64px;
+  position: relative;
+  top: 64px;
+  overflow-y: auto;
+  height: calc(100vh - 64px);
 }
 .panel-padding {
-  padding-bottom: 56px;
+  position: relative;
+  overflow-y: auto;
+  height: calc(100vh - 56px - 56px);
 }
 
 #app-root {

@@ -5,19 +5,32 @@
   role="banner"
   fxLayout="row"
 >
-  <button mat-button [routerLink]="paths.home">
+  <button
+    mat-button
+    [routerLink]="paths.home"
+    [routerLinkActive]="['mat-accent']"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
     <div fxLayout="column">
       <span class="material-symbols-rounded">home</span>
       <span i18n="@@HomeButtonText">Home</span>
     </div>
   </button>
-  <button mat-button [routerLink]="paths.explore">
+  <button
+    mat-button
+    [routerLink]="paths.explore"
+    [routerLinkActive]="['mat-accent']"
+  >
     <div fxLayout="column">
       <span class="material-symbols-rounded">explore</span>
       <span i18n="@@ExploreButtonText">Explore</span>
     </div>
   </button>
-  <button mat-button [routerLink]="paths.notifications">
+  <button
+    mat-button
+    [routerLink]="paths.notifications"
+    [routerLinkActive]="['mat-accent']"
+  >
     <div fxLayout="column">
       <span class="material-symbols-rounded">notifications</span>
       <span i18n="@@NotificationsButtonText">Notifications</span>

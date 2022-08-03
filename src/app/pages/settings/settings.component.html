@@ -6,7 +6,7 @@
     >
     <mat-card-content>
       <form [formGroup]="this.formGroup" fxLayout="column">
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" color="accent">
           <mat-label i18n="@@UsernameInputLabel">Username</mat-label>
           <input
             formControlName="displayName"
@@ -19,7 +19,7 @@
             >please enter valid username</mat-error
           >
         </mat-form-field>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" color="accent">
           <mat-label i18n="@@EmailInputLabel">Email</mat-label>
           <input formControlName="email" matInput type="email" />
           <mat-error
@@ -28,7 +28,7 @@
             >please enter valid email</mat-error
           >
         </mat-form-field>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" color="accent">
           <mat-label i18n="@@PhotoInputLabel">avatar URL</mat-label>
           <input formControlName="photoURL" matInput type="url" />
           <mat-error

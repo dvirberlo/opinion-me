@@ -11,20 +11,34 @@
     >Opinion Me</span
   >
 
-  <div ngClass.xs="d-none" fxFlex="60" fxLayoutAlign="center center">
+  <div
+    ngClass.xs="d-none"
+    fxFlex="60"
+    fxLayoutAlign="center center"
+    [routerLinkActive]="['mat-accent']"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
     <button mat-button [routerLink]="paths.home">
       <div fxLayout="row" fxLayoutAlign="none center">
         <span class="material-symbols-rounded">home</span>
         <span i18n="@@HomeButtonText">Home</span>
       </div>
     </button>
-    <button mat-button [routerLink]="paths.explore">
+    <button
+      mat-button
+      [routerLink]="paths.explore"
+      [routerLinkActive]="['mat-accent']"
+    >
       <div fxLayout="row" fxLayoutAlign="none center">
         <span class="material-symbols-rounded">explore</span>
         <span i18n="@@ExploreButtonText">Explore</span>
       </div>
     </button>
-    <button mat-button [routerLink]="paths.notifications">
+    <button
+      mat-button
+      [routerLink]="paths.notifications"
+      [routerLinkActive]="['mat-accent']"
+    >
       <div fxLayout="row" fxLayoutAlign="none center">
         <span class="material-symbols-rounded">notifications</span>
         <span i18n="@@NotificationsButtonText">Notifications</span>
@@ -38,6 +52,7 @@
     <button
       mat-button
       [routerLink]="paths.newPost"
+      [routerLinkActive]="['mat-accent']"
       ngClass.lt-md="mat-icon-button"
     >
       <span class="material-symbols-rounded">add</span>
@@ -48,6 +63,7 @@
       id="loginBtn"
       mat-button
       [routerLink]="paths.login"
+      [routerLinkActive]="['mat-accent']"
       ngClass.lt-sm="mat-icon-button"
     >
       <span class="material-symbols-rounded">login</span>

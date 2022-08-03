@@ -7,5 +7,7 @@
   border-radius: 10px;
 }
 .tagsSearch {
-  min-width: 75%;
+  width: 500px;
+  min-width: 85%;
+  max-width: 95%;
 }
