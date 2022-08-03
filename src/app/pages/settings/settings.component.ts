@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MAX_USERNAME_LENGTH } from 'src/app/constants/firestore';
 import { paths } from 'src/app/constants/paths';
 import { Doc } from 'src/app/models/firestore';
-import { User } from 'src/app/models/user';
+import { UserType } from 'src/app/models/user';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -19,7 +19,7 @@ const enum FORM_FIELDS {
   styleUrls: ['./settings.component.css'],
 })
 export class SettingsComponent implements OnInit {
-  public selfUser?: User;
+  public selfUser?: UserType;
   public formGroup?: FormGroup;
   constructor(
     private userService: UserService,
@@ -69,7 +69,7 @@ export class SettingsComponent implements OnInit {
     if (this.formGroup?.valid && this.userService.author?.uid) {
       this.userService
         .updateUser(
-          new Doc<User>(this.userService.author.uid, {
+          new Doc<UserType>(this.userService.author.uid, {
             ...this.selfUser,
             ...this.formGroup.value,
           })

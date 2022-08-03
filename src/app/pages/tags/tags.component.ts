@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Post } from 'src/app/models/post';
+import { PostType } from 'src/app/models/post';
 import { CursorReader } from 'src/app/services/firestore-tools';
 import { PostsService } from 'src/app/services/posts.service';
 
@@ -12,7 +12,7 @@ import { PostsService } from 'src/app/services/posts.service';
 export class TagsComponent implements OnInit {
   public id: string = '';
   public isLoaded: boolean = false;
-  public postsReader?: CursorReader<Post>;
+  public postsReader?: CursorReader<PostType>;
   constructor(
     private route: ActivatedRoute,
     private postsService: PostsService

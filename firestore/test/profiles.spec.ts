@@ -1,6 +1,6 @@
 import * as firebase from '@firebase/testing';
 import { PROFILES_PATH } from '../../src/app/constants/firestore';
-import { ProfileConverter, ProfileFromUser } from '../../src/app/models/user';
+import { Profile } from '../../src/app/models/user';
 import {
   anotherUid,
   clearDB,
@@ -10,7 +10,7 @@ import {
   setupUserDB,
 } from './helper';
 
-const dummyProfile = ProfileFromUser(selfUser);
+const dummyProfile = Profile.fromUser(selfUser);
 
 after(async () => {
   await clearDB();
@@ -31,7 +31,7 @@ describe('Profiles collection tests', () => {
     const testDoc = db
       .collection(PROFILES_PATH)
       .doc(selfUid)
-      .withConverter(ProfileConverter);
+      .withConverter(Profile.converter);
     await firebase.assertSucceeds(testDoc.set(dummyProfile));
   });
 
@@ -39,7 +39,7 @@ describe('Profiles collection tests', () => {
     const db = await setupUserDB();
     const testDoc = db.collection(PROFILES_PATH).doc(selfUid);
     for (const docObject of await getOneMissingFieldCombinations(
-      ProfileConverter.toFirestore(dummyProfile)
+      Profile.converter.toFirestore(dummyProfile)
     ))
       await firebase.assertFails(testDoc.set(docObject));
   });
@@ -55,7 +55,7 @@ describe('Profiles collection tests', () => {
     const testDoc = db
       .collection(PROFILES_PATH)
       .doc(anotherUid)
-      .withConverter(ProfileConverter);
+      .withConverter(Profile.converter);
     await firebase.assertFails(testDoc.set(dummyProfile));
   });
 });

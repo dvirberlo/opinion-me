@@ -1,15 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { paths } from 'src/app/constants/paths';
 import { Doc } from 'src/app/models/firestore';
-import { Author } from 'src/app/models/user';
-import {
-  Reply,
-  VoteGetBalance,
-  VoteHasDonwvoted,
-  VoteHasUpvoted,
-  VoteToggleDownvote,
-  VoteToggleUpvote,
-} from 'src/app/models/replies';
+import { ReplyType, Vote } from 'src/app/models/replies';
+import { AuthorType } from 'src/app/models/user';
 import { CursorReader } from 'src/app/services/firestore-tools';
 import { RepliesService } from 'src/app/services/replies.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
@@ -21,12 +14,12 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./replies-view.component.css'],
 })
 export class ReplisViewComponent implements OnInit {
-  @Input() cursorReader?: CursorReader<Reply>;
+  @Input() cursorReader?: CursorReader<ReplyType>;
   @Input() postId?: string;
   public isLoaded: boolean = false;
 
   public paths = paths;
-  public VoteGetBalance = VoteGetBalance;
+  public VoteGetBalance = Vote.getBalance;
 
   constructor(
     public userService: UserService,
@@ -45,16 +38,19 @@ export class ReplisViewComponent implements OnInit {
     });
   };
 
-  public thumbsUp = (reply: Doc<Reply>) =>
+  public thumbsUp = (reply: Doc<ReplyType>) =>
     this.vote(reply, (reply) =>
-      VoteToggleUpvote(reply.data.votes, this.userService.author?.uid || '')
+      Vote.toggleUpvote(reply.data.votes, this.userService.author?.uid || '')
     );
-  public thumbsDown = (reply: Doc<Reply>) =>
+  public thumbsDown = (reply: Doc<ReplyType>) =>
     this.vote(reply, (reply) =>
-      VoteToggleDownvote(reply.data.votes, this.userService.author?.uid || '')
+      Vote.toggleDownvote(reply.data.votes, this.userService.author?.uid || '')
     );
 
-  private vote = (reply: Doc<Reply>, action: (reply: Doc<Reply>) => void) => {
+  private vote = (
+    reply: Doc<ReplyType>,
+    action: (reply: Doc<ReplyType>) => void
+  ) => {
     if (
       this.userService.author === undefined ||
       this.userService.author?.uid === null ||
@@ -68,16 +64,16 @@ export class ReplisViewComponent implements OnInit {
     });
   };
 
-  public hasUpvoted(reply: Reply): boolean {
+  public hasUpvoted(reply: ReplyType): boolean {
     if (this.userService.author?.uid === undefined) return false;
-    return VoteHasUpvoted(reply.votes, this.userService.author.uid || '');
+    return Vote.hasUpvoted(reply.votes, this.userService.author.uid || '');
   }
-  public hasDownvoted(reply: Reply): boolean {
+  public hasDownvoted(reply: ReplyType): boolean {
     if (this.userService.author?.uid === undefined) return false;
-    return VoteHasDonwvoted(reply.votes, this.userService.author.uid || '');
+    return Vote.hasDonwvoted(reply.votes, this.userService.author.uid || '');
   }
 
-  public isSelf(author: Author): boolean {
+  public isSelf(author: AuthorType): boolean {
     return author.uid === this.userService.author?.uid;
   }
 }

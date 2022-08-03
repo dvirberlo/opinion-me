@@ -1,12 +1,7 @@
 import * as firebase from '@firebase/testing';
 import { getRepliesPath, POSTS_PATH } from '../../src/app/constants/firestore';
-import { Post, PostConverter, PostNow } from '../../src/app/models/post';
-import {
-  Reply,
-  ReplyConverter,
-  ReplyNow,
-  VoteEmpty,
-} from '../../src/app/models/replies';
+import { Post, PostType } from '../../src/app/models/post';
+import { Reply, ReplyType, Vote } from '../../src/app/models/replies';
 import {
   anotherAuthor,
   anotherUid,
@@ -22,35 +17,35 @@ import {
 
 // TODO: this is a temporary implmentation of built-in function that will come nodejs LTS will reach v17.0.29
 // (tried to use it with v17.0.29, but something else refused to work)
-const structuredClone = (reply: Reply): Reply => {
-  const clone = { ...reply } as Reply;
-  clone.votes = VoteEmpty();
+const structuredClone = (reply: ReplyType): ReplyType => {
+  const clone = { ...reply } as ReplyType;
+  clone.votes = Vote.empty();
   clone.votes.upvotes = new Set<string>(reply.votes.upvotes);
   clone.votes.downvotes = new Set<string>(reply.votes.downvotes);
   return clone;
 };
 
-const anotherPost = PostNow('test', anotherAuthor, {}, 'test');
-const anotherReply = ReplyNow(anotherAuthor, 'test');
-const selfReply = ReplyNow(selfAuthor, 'test');
+const anotherPost = Post.now('test', anotherAuthor, {}, 'test');
+const anotherReply = Reply.now(anotherAuthor, 'test');
+const selfReply = Reply.now(selfAuthor, 'test');
 
-const adminCreatePost = async (post: Post) => {
+const adminCreatePost = async (post: PostType) => {
   const postId = getRandomId();
   const admin = await setupAdminDB();
   await admin
     .collection(POSTS_PATH)
     .doc(postId)
-    .withConverter(PostConverter)
+    .withConverter(Post.converter)
     .set(post);
   return postId;
 };
-const adminCreateReply = async (postId: string, reply: Reply) => {
+const adminCreateReply = async (postId: string, reply: ReplyType) => {
   const replyId = getRandomId();
   const admin = await setupAdminDB();
   await admin
     .collection(getRepliesPath(postId))
     .doc(replyId)
-    .withConverter(ReplyConverter)
+    .withConverter(Reply.converter)
     .set(reply);
   return replyId;
 };
@@ -84,7 +79,7 @@ describe('Replies collection tests', () => {
     const testDoc = db
       .collection(getRepliesPath(postId))
       .doc(replyId)
-      .withConverter(ReplyConverter);
+      .withConverter(Reply.converter);
     await firebase.assertSucceeds(testDoc.set(structuredClone(selfReply)));
   });
 
@@ -95,7 +90,7 @@ describe('Replies collection tests', () => {
     const db = await setupUserDB();
     const testDoc = db.collection(getRepliesPath(postId)).doc(replyId);
     for (const docObject of await getOneMissingFieldCombinations(
-      ReplyConverter.toFirestore(structuredClone(selfReply))
+      Reply.converter.toFirestore(structuredClone(selfReply))
     ))
       await firebase.assertFails(testDoc.set(docObject));
   });
@@ -108,7 +103,7 @@ describe('Replies collection tests', () => {
     const testDoc = db
       .collection(getRepliesPath(postId))
       .doc(replyId)
-      .withConverter(ReplyConverter);
+      .withConverter(Reply.converter);
     await firebase.assertFails(testDoc.set(structuredClone(anotherReply)));
   });
   it('not logged write should be disallowed', async () => {
@@ -119,7 +114,7 @@ describe('Replies collection tests', () => {
     const testDoc = db
       .collection(getRepliesPath(postId))
       .doc(replyId)
-      .withConverter(ReplyConverter);
+      .withConverter(Reply.converter);
     await firebase.assertFails(testDoc.set(structuredClone(selfReply)));
   });
 
@@ -139,7 +134,7 @@ describe('Replies collection tests', () => {
     const testDoc = db
       .collection(getRepliesPath(postId))
       .doc(replyId)
-      .withConverter(ReplyConverter);
+      .withConverter(Reply.converter);
     await firebase.assertSucceeds(testDoc.set(voted));
   });
   it("one vote after another's vote should be allowed", async () => {
@@ -153,7 +148,7 @@ describe('Replies collection tests', () => {
     const testDoc = db
       .collection(getRepliesPath(postId))
       .doc(replyId)
-      .withConverter(ReplyConverter);
+      .withConverter(Reply.converter);
     await firebase.assertSucceeds(testDoc.set(voted));
   });
   it('one non-self vote should be disallowed', async () => {
@@ -163,7 +158,7 @@ describe('Replies collection tests', () => {
       structuredClone(anotherReply)
     );
 
-    const voted = ReplyConverter.toFirestore(structuredClone(anotherReply));
+    const voted = Reply.converter.toFirestore(structuredClone(anotherReply));
     voted.votes.upvotes.push(anotherUid);
 
     const db = await setupUserDB();
@@ -174,7 +169,7 @@ describe('Replies collection tests', () => {
     const postId = await adminCreatePost(anotherPost);
     const replyId = await adminCreateReply(postId, structuredClone(selfReply));
 
-    const voted = ReplyConverter.toFirestore(structuredClone(selfReply));
+    const voted = Reply.converter.toFirestore(structuredClone(selfReply));
     voted.votes.upvotes.push(selfUid);
 
     const db = await setupUserDB();
@@ -189,7 +184,7 @@ describe('Replies collection tests', () => {
       structuredClone(anotherReply)
     );
 
-    const voted = ReplyConverter.toFirestore(structuredClone(anotherReply));
+    const voted = Reply.converter.toFirestore(structuredClone(anotherReply));
     voted.votes.upvotes.push(selfUid);
     voted.votes.upvotes.push(selfUid);
 
@@ -199,11 +194,11 @@ describe('Replies collection tests', () => {
   });
   it('vote when already voted should be disallowed', async () => {
     const postId = await adminCreatePost(anotherPost);
-    const voted = ReplyConverter.toFirestore(structuredClone(anotherReply));
+    const voted = Reply.converter.toFirestore(structuredClone(anotherReply));
     voted.votes.upvotes.push(selfUid);
     const replyId = await adminCreateReply(postId, voted);
 
-    const votedTwice = ReplyConverter.toFirestore(
+    const votedTwice = Reply.converter.toFirestore(
       structuredClone(anotherReply)
     );
     votedTwice.votes.upvotes.push(selfUid);
@@ -219,7 +214,7 @@ describe('Replies collection tests', () => {
       structuredClone(anotherReply)
     );
 
-    const voted = ReplyConverter.toFirestore(structuredClone(anotherReply));
+    const voted = Reply.converter.toFirestore(structuredClone(anotherReply));
     voted.votes.upvotes.push(selfUid);
     voted.votes.downvotes.push(anotherUid);
 
@@ -230,7 +225,7 @@ describe('Replies collection tests', () => {
 
   it('double delete vote should be disallowed', async () => {
     const postId = await adminCreatePost(anotherPost);
-    const voted = ReplyConverter.toFirestore(structuredClone(anotherReply));
+    const voted = Reply.converter.toFirestore(structuredClone(anotherReply));
     voted.votes.upvotes.push(selfUid);
     voted.votes.upvotes.push(anotherUid);
     const replyId = await adminCreateReply(postId, voted);
@@ -239,12 +234,12 @@ describe('Replies collection tests', () => {
     const testDoc = db
       .collection(getRepliesPath(postId))
       .doc(replyId)
-      .withConverter(ReplyConverter);
+      .withConverter(Reply.converter);
     await firebase.assertFails(testDoc.set(structuredClone(anotherReply)));
   });
   it('double delete different vote should be disallowed', async () => {
     const postId = await adminCreatePost(anotherPost);
-    const voted = ReplyConverter.toFirestore(structuredClone(anotherReply));
+    const voted = Reply.converter.toFirestore(structuredClone(anotherReply));
     voted.votes.upvotes.push(selfUid);
     voted.votes.downvotes.push(anotherUid);
     const replyId = await adminCreateReply(postId, voted);
@@ -253,17 +248,17 @@ describe('Replies collection tests', () => {
     const testDoc = db
       .collection(getRepliesPath(postId))
       .doc(replyId)
-      .withConverter(ReplyConverter);
+      .withConverter(Reply.converter);
     await firebase.assertFails(testDoc.set(structuredClone(anotherReply)));
   });
 
   it('switch from upvote to downvote at once should be allowed', async () => {
     const postId = await adminCreatePost(anotherPost);
-    const voted = ReplyConverter.toFirestore(structuredClone(anotherReply));
+    const voted = Reply.converter.toFirestore(structuredClone(anotherReply));
     voted.votes.upvotes.push(selfUid);
     const replyId = await adminCreateReply(postId, voted);
 
-    const votedSwitch = ReplyConverter.toFirestore(
+    const votedSwitch = Reply.converter.toFirestore(
       structuredClone(anotherReply)
     );
     votedSwitch.votes.upvotes.splice(
@@ -280,7 +275,7 @@ describe('Replies collection tests', () => {
     const postId = await adminCreatePost(anotherPost);
     const replyId = getRandomId();
 
-    const voted = ReplyConverter.toFirestore(structuredClone(anotherReply));
+    const voted = Reply.converter.toFirestore(structuredClone(anotherReply));
     voted.votes.upvotes.push(selfUid);
 
     const db = await setupUserDB();

@@ -5,9 +5,9 @@ import {
   DocumentReference,
   getFirestore,
 } from 'firebase-admin/firestore';
-import { PostConverter } from '../../src/app/models/post';
-import { ReplyConverter } from '../../src/app/models/replies';
-import { ProfileConverter, UserConverter } from '../../src/app/models/user';
+import { Post } from '../../src/app/models/post';
+import { Reply } from '../../src/app/models/replies';
+import { Profile, User } from '../../src/app/models/user';
 
 // Note: you will need to add .env in /firestore and set GOOGLE_APPLICATION_CREDENTIALS path to the .json token file
 envConfig();
@@ -22,10 +22,10 @@ const main = async () => {
   const db = getFirestore(app);
 
   const converters: any = {
-    users: UserConverter,
-    profiles: ProfileConverter,
-    posts: PostConverter,
-    replies: ReplyConverter,
+    users: User.converter,
+    profiles: Profile.converter,
+    posts: Post.converter,
+    replies: Reply.converter,
   };
   // this should work:
   const dbCollections = await db.listCollections();

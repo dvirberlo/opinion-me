@@ -5,16 +5,12 @@ import { MAX_POST_PREVIEW_LENGTH } from 'src/app/constants/post';
 import { RELPY_DIALOG_CONFIG } from 'src/app/constants/reply';
 import { Doc } from 'src/app/models/firestore';
 import {
-  Post,
+  PostType,
   Reaction,
-  ReactionsGetReactionCount,
-  ReactionsHasAllReactions,
-  ReactionsHasReacted,
-  ReactionsHasReactions,
+  Reactions,
   ReactionsList,
-  ReactionsToggleReaction,
 } from 'src/app/models/post';
-import { Reply, ReplyNow } from 'src/app/models/replies';
+import { Reply, ReplyType } from 'src/app/models/replies';
 import { CursorReader } from 'src/app/services/firestore-tools';
 import { PostsService } from 'src/app/services/posts.service';
 import { RepliesService } from 'src/app/services/replies.service';
@@ -29,17 +25,17 @@ import { ReplyDialogComponent } from '../reply-dialog/reply-dialog.component';
   styleUrls: ['./post-view.component.css'],
 })
 export class PostViewComponent implements OnInit {
-  @Input() public post?: Doc<Post>;
+  @Input() public post?: Doc<PostType>;
   @Input() public previewMode: boolean = false;
 
   public paths = paths;
   public ReactionList = ReactionsList;
-  public ReactionsHasAllReactions = ReactionsHasAllReactions;
-  public ReactionsHasReactions = ReactionsHasReactions;
-  public ReactionsGetReactionCount = ReactionsGetReactionCount;
+  public ReactionsHasAllReactions = Reactions.hasAllReactions;
+  public ReactionsHasReactions = Reactions.hasReactions;
+  public ReactionsGetReactionCount = Reactions.getReactionCount;
   public tagsList: string[] = [];
 
-  public repliesReader?: CursorReader<Reply>;
+  public repliesReader?: CursorReader<ReplyType>;
 
   constructor(
     private repliesService: RepliesService,
@@ -80,11 +76,13 @@ export class PostViewComponent implements OnInit {
       result === undefined
     )
       return;
-    const reaply = ReplyNow(this.userService.author, result);
+    const reaply = Reply.now(this.userService.author, result);
     this.repliesService
       .addReply(structuredClone(reaply), this.post.id)
-      .then((reference: DocumentReference<Reply>) => {
-        this.repliesReader?.addedToTop(new Doc<Reply>(reference.id, reaply));
+      .then((reference: DocumentReference<ReplyType>) => {
+        this.repliesReader?.addedToTop(
+          new Doc<ReplyType>(reference.id, reaply)
+        );
       })
       .catch(this.snackbarService.errorTryAgain);
   };
@@ -110,7 +108,7 @@ export class PostViewComponent implements OnInit {
     if (typeof this.userService.author?.uid !== 'string')
       return this.snackbarService.pleaseLogin();
     if (this.post === undefined) return;
-    ReactionsToggleReaction(
+    Reactions.toggleReaction(
       this.post.data.reactions,
       reaction,
       this.userService.author.uid
@@ -124,7 +122,7 @@ export class PostViewComponent implements OnInit {
     )
       return false;
     return (
-      ReactionsHasReacted(
+      Reactions.hasReacted(
         this.post?.data.reactions,
         reaction,
         this.userService.author.uid

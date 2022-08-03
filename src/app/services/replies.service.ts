@@ -10,7 +10,7 @@ import {
 import { getRepliesPath, REPLIES_ORDER } from '../constants/firestore';
 import { MAX_REPLIES_PER_REQUEST } from '../constants/reply';
 import { Doc } from '../models/firestore';
-import { Reply, ReplyConverter } from '../models/replies';
+import { Reply, ReplyType } from '../models/replies';
 import { CursorReader } from './firestore-tools';
 
 @Injectable({
@@ -20,30 +20,30 @@ export class RepliesService {
   constructor(private firestore: Firestore) {}
 
   public getRepliesReader = (postId: string) =>
-    new CursorReader<Reply>(
+    new CursorReader<ReplyType>(
       this.firestore,
       getRepliesPath(postId),
       REPLIES_ORDER,
       MAX_REPLIES_PER_REQUEST,
-      ReplyConverter,
+      Reply.converter,
       'posts-reader-' + postId
     );
 
   public addReply = (
-    reply: Reply,
+    reply: ReplyType,
     postId: string
-  ): Promise<DocumentReference<Reply>> =>
+  ): Promise<DocumentReference<ReplyType>> =>
     addDoc(
       collection(this.firestore, getRepliesPath(postId)).withConverter(
-        ReplyConverter
+        Reply.converter
       ),
       reply
     );
 
-  public voteUpdated = (reply: Doc<Reply>, postId: string): Promise<void> =>
+  public voteUpdated = (reply: Doc<ReplyType>, postId: string): Promise<void> =>
     setDoc(
       doc(this.firestore, getRepliesPath(postId), reply.id).withConverter(
-        ReplyConverter
+        Reply.converter
       ),
       reply.data
     );

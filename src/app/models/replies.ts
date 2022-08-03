@@ -1,58 +1,62 @@
 import { dateNow, FireConvertTo } from './firestore';
-import { Author } from './user';
+import { AuthorType } from './user';
 
-export interface Vote {
+export interface VoteType {
   upvotes: Set<string>;
   downvotes: Set<string>;
 }
 
-export const VoteEmpty = (): Vote => {
-  return {
-    upvotes: new Set<string>(),
-    downvotes: new Set<string>(),
+export class Vote {
+  public static empty = (): VoteType => {
+    return {
+      upvotes: new Set<string>(),
+      downvotes: new Set<string>(),
+    };
   };
-};
-export const VoteGetBalance = (vote: Vote): number => {
-  return vote.upvotes.size - vote.downvotes.size;
-};
-export const VoteToggleUpvote = (vote: Vote, uid: string): void => {
-  VoteToggleVote(uid, vote.upvotes, vote.downvotes);
-};
-export const VoteToggleDownvote = (vote: Vote, uid: string): void => {
-  VoteToggleVote(uid, vote.downvotes, vote.upvotes);
-};
-export const VoteToggleVote = (
-  uid: string,
-  array: Set<string>,
-  otherArray: Set<string>
-): void => {
-  const deleted = array.delete(uid);
-  if (!deleted) {
-    array.add(uid);
-    // when adding, make sure the uid is removed from the other array
-    otherArray.delete(uid);
-  }
-};
-export const VoteHasUpvoted = (vote: Vote, uid: string): boolean => {
-  return vote.upvotes.has(uid);
-};
-export const VoteHasDonwvoted = (vote: Vote, uid: string): boolean => {
-  return vote.downvotes.has(uid);
-};
+  public static getBalance = (vote: VoteType): number => {
+    return vote.upvotes.size - vote.downvotes.size;
+  };
+  public static toggleUpvote = (vote: VoteType, uid: string): void => {
+    Vote.toggleVote(uid, vote.upvotes, vote.downvotes);
+  };
+  public static toggleDownvote = (vote: VoteType, uid: string): void => {
+    Vote.toggleVote(uid, vote.downvotes, vote.upvotes);
+  };
+  public static toggleVote = (
+    uid: string,
+    array: Set<string>,
+    otherArray: Set<string>
+  ): void => {
+    const deleted = array.delete(uid);
+    if (!deleted) {
+      array.add(uid);
+      // when adding, make sure the uid is removed from the other array
+      otherArray.delete(uid);
+    }
+  };
+  public static hasUpvoted = (vote: VoteType, uid: string): boolean => {
+    return vote.upvotes.has(uid);
+  };
+  public static hasDonwvoted = (vote: VoteType, uid: string): boolean => {
+    return vote.downvotes.has(uid);
+  };
+}
 
-export interface Reply {
-  author: Author;
+export interface ReplyType {
+  author: AuthorType;
   date: number;
   content: string;
-  votes: Vote;
+  votes: VoteType;
 }
-export const ReplyNow = (author: Author, content: string): Reply =>
-  ({
-    author,
-    date: dateNow(),
-    content,
-    votes: VoteEmpty(),
-  } as Reply);
-export const ReplyConverter = FireConvertTo<Reply>(
-  ReplyNow({ displayName: '', photoURL: '', uid: '' }, '')
-);
+export class Reply {
+  public static now = (author: AuthorType, content: string): ReplyType =>
+    ({
+      author,
+      date: dateNow(),
+      content,
+      votes: Vote.empty(),
+    } as ReplyType);
+  public static converter = FireConvertTo<ReplyType>(
+    Reply.now({ displayName: '', photoURL: '', uid: '' }, '')
+  );
+}

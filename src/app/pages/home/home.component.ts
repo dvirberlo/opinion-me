@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Post } from 'src/app/models/post';
+import { PostType } from 'src/app/models/post';
 import { CursorReader } from 'src/app/services/firestore-tools';
 import { PostsService } from 'src/app/services/posts.service';
 
@@ -10,7 +10,7 @@ import { PostsService } from 'src/app/services/posts.service';
 })
 export class HomeComponent implements OnInit {
   public isLoaded: boolean = false;
-  public postsReader?: CursorReader<Post>;
+  public postsReader?: CursorReader<PostType>;
 
   constructor(private postsService: PostsService) {}
 

@@ -4,13 +4,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Router } from '@angular/router';
-import { map, Observable, startWith, Subscription } from 'rxjs';
+import { map, Observable, Subscription } from 'rxjs';
 import { paths } from 'src/app/constants/paths';
 import { MAX_POST_LENGTH, MAX_POST_TITLE_LENGTH } from 'src/app/constants/post';
 import { Doc } from 'src/app/models/firestore';
-import { PostTagsNow } from 'src/app/models/post';
+import { Post } from 'src/app/models/post';
 import { Tag, TagsList } from 'src/app/models/tags';
-import { User } from 'src/app/models/user';
+import { UserType } from 'src/app/models/user';
 import { PostsService } from 'src/app/services/posts.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { UserService } from 'src/app/services/user.service';
@@ -59,7 +59,7 @@ export class NewPostComponent implements OnInit {
     );
   }
 
-  private initializeForm = (user: Doc<User> | undefined) => {
+  private initializeForm = (user: Doc<UserType> | undefined) => {
     if (user === undefined) return;
     this.userSub?.unsubscribe();
     this.formGroup = this.formBuilder.group({
@@ -96,7 +96,7 @@ export class NewPostComponent implements OnInit {
       return this.snackbarService.pleaseLogin();
     if (this.formGroup.invalid) return this.formGroup.markAllAsTouched();
 
-    const newPost = PostTagsNow(
+    const newPost = Post.tagsNow(
       this.title?.value,
       this.userService.author,
       this.tagsInput,

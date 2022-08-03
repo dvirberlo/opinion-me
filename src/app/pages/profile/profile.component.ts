@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Doc } from 'src/app/models/firestore';
-import { Profile } from 'src/app/models/user';
+import { ProfileType } from 'src/app/models/user';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class ProfileComponent implements OnInit {
   public id: string = '';
-  public profile?: Doc<Profile>;
+  public profile?: Doc<ProfileType>;
   public isLoaded: boolean = false;
   constructor(
     private route: ActivatedRoute,
@@ -26,7 +26,7 @@ export class ProfileComponent implements OnInit {
   }
   private loadProfile = () => {
     this.userService.getProfile(this.id).then((profile) => {
-      this.profile = new Doc<Profile>(this.id, profile);
+      this.profile = new Doc<ProfileType>(this.id, profile);
       this.isLoaded = true;
     });
   };

@@ -6,45 +6,51 @@ interface UserDetails {
   displayName: nullableString;
   photoURL: nullableString;
 }
-export interface User extends UserDetails {
+export interface UserType extends UserDetails {
   createAt: number;
   email: nullableString;
 }
 
-export const UserNow = (
-  email: nullableString,
-  displayName: nullableString,
-  photoURL: nullableString
-): User => {
-  return {
-    createAt: dateNow(),
-    email,
-    displayName,
-    photoURL,
+export class User {
+  public static now = (
+    email: nullableString,
+    displayName: nullableString,
+    photoURL: nullableString
+  ): UserType => {
+    return {
+      createAt: dateNow(),
+      email,
+      displayName,
+      photoURL,
+    };
   };
-};
 
-export const UserConverter = FireConvertTo<User>(UserNow('', '', ''));
+  public static converter = FireConvertTo<UserType>(User.now('', '', ''));
+}
 
-export interface Author extends UserDetails {
+export interface AuthorType extends UserDetails {
   uid: nullableString;
 }
-export const AuthorFromUser = (user: User, uid: string): Author => {
-  return { uid, displayName: user.displayName, photoURL: user.photoURL };
-};
+export class Author {
+  public static fromUser = (user: UserType, uid: string): AuthorType => {
+    return { uid, displayName: user.displayName, photoURL: user.photoURL };
+  };
+}
 
-export interface Profile extends UserDetails {
+export interface ProfileType extends UserDetails {
   createAt: number;
 }
-export const ProfileFromUser = (user: User): Profile => {
-  return {
-    displayName: user.displayName,
-    photoURL: user.photoURL,
-    createAt: user.createAt,
+export class Profile {
+  public static fromUser = (user: UserType): ProfileType => {
+    return {
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      createAt: user.createAt,
+    };
   };
-};
-export const ProfileConverter = FireConvertTo<Profile>({
-  displayName: '',
-  photoURL: '',
-  createAt: 0,
-});
+  public static converter = FireConvertTo<ProfileType>({
+    displayName: '',
+    photoURL: '',
+    createAt: 0,
+  });
+}

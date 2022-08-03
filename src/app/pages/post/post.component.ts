@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Doc } from 'src/app/models/firestore';
-import { Post } from 'src/app/models/post';
+import { PostType } from 'src/app/models/post';
 import { PostsService } from 'src/app/services/posts.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { PostsService } from 'src/app/services/posts.service';
 })
 export class PostComponent implements OnInit {
   public id: string = '';
-  public post?: Doc<Post>;
+  public post?: Doc<PostType>;
   public isLoaded: boolean = false;
   constructor(
     private route: ActivatedRoute,
@@ -27,7 +27,7 @@ export class PostComponent implements OnInit {
 
   private loadPost = () => {
     this.postsService.getPost(this.id).then((post) => {
-      this.post = new Doc<Post>(this.id, post);
+      this.post = new Doc<PostType>(this.id, post);
       this.isLoaded = true;
     });
   };
