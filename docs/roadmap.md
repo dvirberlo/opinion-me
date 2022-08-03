@@ -4,13 +4,11 @@ This list is not ordered by priority nor importance.
 
 ## Features
 
-- create custom theme
 - more authentication options
   - microsoft
   - github
 - add more tags to the list
 - implement notifications tab
-- create logo
 
 ### Maybe?
 
