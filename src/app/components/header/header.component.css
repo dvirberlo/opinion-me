@@ -5,3 +5,6 @@
 #appTitle {
   cursor: pointer;
 }
+#app-icon {
+  width: 1.5em;
+}

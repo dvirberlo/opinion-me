@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-49 -0.5 420 420">
+  <defs>
+    <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" id="mx-gradient-c88719-1-ffe97d-1-e-0">
+      <stop offset="0%" style="stop-color: rgb(200, 135, 25); stop-opacity: 1;" />
+      <stop offset="100%" style="stop-color: rgb(255, 233, 125); stop-opacity: 1;" />
+    </linearGradient>
+    <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" id="mx-gradient-1c313a-1-455a64-1-e-0">
+      <stop offset="0%" style="stop-color: rgb(28, 49, 58); stop-opacity: 1;" />
+      <stop offset="100%" style="stop-color: rgb(69, 90, 100); stop-opacity: 1;" />
+    </linearGradient>
+  </defs>
+  <g>
+    <ellipse cx="161" cy="161" rx="161" ry="161" fill="url(#mx-gradient-c88719-1-ffe97d-1-e-0)" stroke="none"
+      pointer-events="all" />
+    <rect x="84" y="337" width="154" height="20" rx="3" ry="3" fill="url(#mx-gradient-1c313a-1-455a64-1-e-0)"
+      stroke="none" pointer-events="all" />
+    <rect x="107" y="368" width="108" height="20" rx="3" ry="3" fill="url(#mx-gradient-1c313a-1-455a64-1-e-0)"
+      stroke="none" pointer-events="all" />
+    <rect x="132" y="399" width="58" height="20" rx="3" ry="3" fill="url(#mx-gradient-1c313a-1-455a64-1-e-0)"
+      stroke="none" pointer-events="all" />
+    <rect x="99" y="206" width="130" height="95.59" fill="none" stroke="none" transform="rotate(90,164,253.79)"
+      pointer-events="all" />
+    <path d="M 99 253.65 C 125.45 206.25 137.92 206 163.99 253.65 C 190.08 301.3 202.3 301.59 229 253.65" fill="none"
+      stroke="#000000" stroke-width="10" stroke-miterlimit="10" transform="rotate(90,164,253.79)"
+      pointer-events="all" />
+  </g>
+</svg>

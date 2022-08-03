@@ -4,11 +4,14 @@
   color="primary"
   role="banner"
 >
-  <span fxFlex="15" id="appTitle" [routerLink]="paths.home" i18n="@@AppName"
+  <span fxFlex="20" id="appTitle" [routerLink]="paths.home" i18n="@@AppName"
+    ><picture>
+      <source srcset="/assets/svg_icons/app-icon.svg" />
+      <img id="app-icon" /> </picture
     >Opinion Me</span
   >
 
-  <div ngClass.xs="d-none" fxFlex="70" fxLayoutAlign="center center">
+  <div ngClass.xs="d-none" fxFlex="60" fxLayoutAlign="center center">
     <button mat-button [routerLink]="paths.home">
       <div fxLayout="row" fxLayoutAlign="none center">
         <span class="material-symbols-rounded">home</span>
@@ -31,26 +34,21 @@
 
   <span fxFlex.xs="1 1 auto"></span>
 
-  <div fxFlex="15" id="authStatus" fxLayoutAlign="end center">
-    <button mat-button [routerLink]="paths.newPost" ngClass.lt-lg="d-none">
-      <div fxLayout="row" fxLayoutAlign="none center">
-        <span class="material-symbols-rounded">add</span>
-        <span i18n="@@NewPostButtonText">New Post</span>
-      </div>
-    </button>
+  <div fxFlex="20" id="authStatus" fxLayoutAlign="end center">
     <button
-      class="mat-button"
-      mat-icon-button
+      mat-button
       [routerLink]="paths.newPost"
-      ngClass.gt-md="d-none"
+      ngClass.lt-md="mat-icon-button"
     >
       <span class="material-symbols-rounded">add</span>
+      <span i18n="@@NewPostButtonText" ngClass.lt-md="d-none">New Post</span>
     </button>
     <button
       *ngIf="!this.authService.isLogged"
       id="loginBtn"
       mat-button
       [routerLink]="paths.login"
+      ngClass.lt-sm="mat-icon-button"
     >
       <span class="material-symbols-rounded">login</span>
       <span i18n="@@LoginButtonText" ngClass.lt-sm="d-none">Login</span>
