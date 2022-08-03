@@ -59,10 +59,10 @@
       [matMenuTriggerFor]="userMenu"
       mat-icon-button
     >
-      <app-avatar
+      <app-profile-view
         photoURL="{{ (this.userService.$user | async)?.data?.photoURL }}"
-        imgClasses="header"
-      ></app-avatar>
+        type="imgOnly"
+      ></app-profile-view>
     </button>
     <mat-menu #userMenu="matMenu">
       <button

@@ -1,0 +1,56 @@
+<div *ngIf="this.type !== 'fullPage'" fxLayout="row">
+  <div>
+    <picture>
+      <source [srcset]="this.photoURL" />
+      <img
+        id="avatar"
+        i18n-title
+        title="avatar"
+        alt="avatar"
+        [class]="this.type"
+        onerror="this.classList.add('d-none');this.parentElement.parentElement.lastElementChild.classList.remove('d-none')"
+      />
+    </picture>
+    <span
+      id="fallbackAvatar"
+      [class]="
+        'material-symbols-fill material-symbols-rounded d-none ' + this.type
+      "
+      >account_circle</span
+    >
+    <span *ngIf="this.type !== 'imgOnly'">
+      {{ this.displayName }} • {{ this.date * 1000 | timeago }}
+    </span>
+  </div>
+</div>
+<div *ngIf="this.type === 'fullPage'">
+  <mat-card>
+    <div fxLayout="column" fxLayoutAlign="space-around center">
+      <div>
+        <picture>
+          <source [srcset]="this.photoURL" />
+          <img
+            id="avatar"
+            i18n-title
+            title="avatar"
+            alt="avatar"
+            [class]="this.type"
+            onerror="this.classList.add('d-none');this.parentElement.parentElement.lastElementChild.classList.remove('d-none')"
+          />
+        </picture>
+        <span
+          id="fallbackAvatar"
+          [class]="
+            'material-symbols-fill material-symbols-rounded d-none ' + this.type
+          "
+          >account_circle</span
+        >
+      </div>
+      <mat-card-title class="my-2">{{ this.displayName }}</mat-card-title>
+      <mat-card-subtitle>
+        <span i18n="@@JoinedLabel">Joined</span>
+        {{ this.date * 1000 | timeago }}
+      </mat-card-subtitle>
+    </div>
+  </mat-card>
+</div>

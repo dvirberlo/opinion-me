@@ -7,13 +7,13 @@
       [routerLink]="['/', paths.profile, this.post.data.author.uid]"
       class="linkCursor multilineText words-break d-block"
     >
-      <app-avatar
+      <app-profile-view
         [photoURL]="this.post.data.author.photoURL || ''"
-        imgClasses="postProfile"
-      ></app-avatar
-      >{{ this.post.data.author.displayName }} •
-      {{ this.post.data.date * 1000 | timeago }}</mat-card-subtitle
-    >
+        [displayName]="this.post.data.author.displayName || ''"
+        [date]="this.post.data.date"
+        type="oneLine"
+      ></app-profile-view>
+    </mat-card-subtitle>
   </mat-card-header>
   <!-- content -->
   <mat-card-content class="my-1">

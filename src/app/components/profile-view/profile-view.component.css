@@ -1,0 +1,29 @@
+span#fallbackAvatar {
+  vertical-align: middle;
+  border-radius: 50%;
+}
+img#avatar {
+  border-radius: 50%;
+  width: auto;
+}
+
+img.fullPage {
+  height: 15em;
+}
+span.fullPage {
+  font-size: 15em;
+}
+
+img.oneLine {
+  height: 1.7em;
+}
+span.oneLine {
+  font-size: 1.7em;
+}
+
+img.imgOnly {
+  height: 3em;
+}
+span.imgOnly {
+  font-size: 3em;
+}

@@ -15,16 +15,12 @@
       class="ms-1 my-1 linkCursor multilineText words-break d-inline-block"
       [routerLink]="['/', paths.profile, replyDoc.data.author.uid]"
     >
-      <!-- profile picture -->
-      <app-avatar
+      <app-profile-view
         [photoURL]="replyDoc.data.author.photoURL || ''"
-        imgClasses="replyProfile"
-      ></app-avatar>
-      <!-- profile name and reply date -->
-      <span>
-        {{ replyDoc.data.author.displayName }} •
-        {{ replyDoc.data.date * 1000 | timeago }}
-      </span>
+        [displayName]="replyDoc.data.author.displayName || ''"
+        [date]="replyDoc.data.date"
+        type="oneLine"
+      ></app-profile-view>
     </mat-card-subtitle>
     <!-- reply content -->
     <mat-card-content class="ms-1 mb-0 multilineText words-break d-block">

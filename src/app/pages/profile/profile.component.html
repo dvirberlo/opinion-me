@@ -1,20 +1,13 @@
 <section [ngSwitch]="this.isLoaded" class="container">
   <div *ngSwitchCase="true">
-    <mat-card *ngIf="this.profile !== undefined">
-      <div fxLayout="column" fxLayoutAlign="space-around center">
-        <app-avatar
-          [photoURL]="this.profile.data.photoURL || ''"
-          imgClasses="profilePage"
-        ></app-avatar>
-        <mat-card-title class="my-2">{{
-          this.profile.data.displayName
-        }}</mat-card-title>
-        <mat-card-subtitle>
-          <span i18n="@@JoinedLabel">Joined</span>
-          {{ this.profile.data.createAt * 1000 | timeago }}
-        </mat-card-subtitle>
-      </div>
-    </mat-card>
+    <app-profile-view
+      [date]="this.profile.data.createAt"
+      [photoURL]="this.profile.data.photoURL || ''"
+      [displayName]="this.profile.data.displayName || ''"
+      type="fullPage"
+      *ngIf="this.profile !== undefined"
+    >
+    </app-profile-view>
     <app-page-not-found *ngIf="this.profile === undefined"></app-page-not-found>
   </div>
   <mat-spinner
