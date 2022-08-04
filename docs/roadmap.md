@@ -8,11 +8,11 @@ This list is not ordered by priority nor importance.
   - microsoft
   - github
 - add more tags to the list
-- implement notifications tab
+- add swipe gesture actions
+  - dismiss notification
 
 ### Maybe?
 
-- add gesture support
 - add category field to posts
 - personal feed based on tags (frequent visited tags)
 
@@ -24,8 +24,8 @@ This list is not ordered by priority nor importance.
   - UI
   - E2E
 - separate firebase-admin enabled server for post and replies filtering
-- search posts by tags
-- use transaction for votes and reactions
+- move route to settings on register from userService to app component
+- verifyCreated in userSerive should use something like FireCache.CacheFirst
 
 ### Maybe?
 
@@ -34,3 +34,4 @@ This list is not ordered by priority nor importance.
 - multi-region DB
 - on DB side limit number of queries per user per second
 - DB search for users and posts
+- copy only used classes from bootstrap to app assets
