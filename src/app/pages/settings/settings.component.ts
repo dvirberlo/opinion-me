@@ -22,7 +22,7 @@ export class SettingsComponent implements OnInit {
   public selfUser?: UserType;
   public formGroup?: FormGroup;
   constructor(
-    private userService: UserService,
+    public userService: UserService,
     private snackbarService: SnackbarService,
     private formBuilder: FormBuilder,
     private router: Router

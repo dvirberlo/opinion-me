@@ -7,7 +7,6 @@ import {
   OAuthProvider,
   onAuthStateChanged,
   signInWithRedirect,
-  User as AuthUser,
 } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 
@@ -15,18 +14,14 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  public isLogged: boolean = false;
   public isLogged$: Observable<boolean>;
 
   constructor(private auth: Auth) {
     this.isLogged$ = new Observable<boolean>((observer) => {
       onAuthStateChanged(this.auth, (user) => {
-        this.updateLoggedStatus(user);
-        observer.next(this.isLogged);
+        observer.next(user?.uid !== undefined);
       });
     });
-    // self-subscribe to the Observable to update the logged status
-    this.isLogged$.subscribe((isLogged) => (this.isLogged = isLogged));
   }
 
   // redirects to google sign in method
@@ -48,8 +43,4 @@ export class AuthService {
   public logout = (): Promise<void> => {
     return this.auth.signOut();
   };
-
-  private updateLoggedStatus(user: AuthUser | null | undefined) {
-    this.isLogged = user?.uid !== undefined;
-  }
 }

@@ -1,4 +1,4 @@
-<mat-card *ngIf="this.selfUser && this.formGroup" class="container">
+<mat-card *ngIf="this.formGroup" class="container">
   <mat-card-title i18n="@@SettingsTitle">Settings</mat-card-title>
   <mat-card>
     <mat-card-subtitle i18n="@@EditProfileTitle"
@@ -56,6 +56,15 @@
     </mat-card-content>
   </mat-card>
 </mat-card>
-<div *ngIf="!this.selfUser && !this.formGroup">
-  <app-page-not-found></app-page-not-found>
+<div
+  *ngIf="(this.userService.isAuthLoaded | async) && !this.formGroup"
+  class="container mt-2"
+>
+  <app-login-buttons [continueLabel]="true"></app-login-buttons>
 </div>
+<mat-spinner
+  *ngIf="!(this.userService.isAuthLoaded | async)"
+  mode="indeterminate"
+  diameter="30"
+  class="mx-auto"
+></mat-spinner>

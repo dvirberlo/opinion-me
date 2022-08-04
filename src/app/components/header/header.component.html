@@ -58,7 +58,10 @@
       <span i18n="@@NewPostButtonText" ngClass.lt-md="d-none">New Post</span>
     </button>
     <button
-      *ngIf="!this.authService.isLogged"
+      *ngIf="
+        (this.userService.isAuthLoaded | async) &&
+        !(this.authService.isLogged$ | async)
+      "
       id="loginBtn"
       mat-button
       [routerLink]="paths.login"
@@ -70,7 +73,10 @@
     </button>
 
     <button
-      *ngIf="this.authService.isLogged"
+      *ngIf="
+        (this.userService.isAuthLoaded | async) &&
+        (this.authService.isLogged$ | async)
+      "
       [matMenuTriggerFor]="userMenu"
       mat-icon-button
     >
@@ -78,6 +84,14 @@
         photoURL="{{ (this.userService.$user | async)?.data?.photoURL }}"
         type="imgOnly"
       ></app-profile-view>
+    </button>
+    <button mat-icon-button *ngIf="!(this.userService.isAuthLoaded | async)">
+      <mat-spinner
+        color="accent"
+        mode="indeterminate"
+        diameter="30"
+        class="mx-auto"
+      ></mat-spinner>
     </button>
     <mat-menu #userMenu="matMenu">
       <button

@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.isLogged$.subscribe((isLogged) => {
-      if (isLogged) this.router.navigateByUrl('/' + paths.settings);
+      if (isLogged) this.router.navigateByUrl('/' + paths.home);
     });
   }
 }

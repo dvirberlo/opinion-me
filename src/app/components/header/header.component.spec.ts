@@ -52,13 +52,4 @@ describe('HeaderComponent', () => {
     ) as HTMLElement;
     expect(toolbar.attributes.getNamedItem('color')?.value).toBe('primary');
   });
-
-  it('should render login button', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
-    fixture.detectChanges();
-    const button = fixture.nativeElement.querySelector(
-      '#loginBtn'
-    ) as HTMLElement;
-    expect(button?.textContent).toContain('Login');
-  });
 });

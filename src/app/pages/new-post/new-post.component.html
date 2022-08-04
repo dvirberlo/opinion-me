@@ -1,4 +1,4 @@
-<div *ngIf="this.formGroup !== undefined">
+<div *ngIf="this.formGroup">
   <form [formGroup]="this.formGroup" fxLayout="column" class="container mt-2">
     <h1 class="text-center" i18n>New Post</h1>
     <mat-form-field appearance="fill" color="accent">
@@ -89,9 +89,15 @@
     </div>
   </form>
 </div>
-<div *ngIf="this.formGroup === undefined" class="container">
-  <h2 i18n="@@LoginBeforeNewPost" class="text-center">
-    Please login before creating new posts
-  </h2>
-  <app-login-buttons></app-login-buttons>
+<div
+  *ngIf="(this.userService.isAuthLoaded | async) && !this.formGroup"
+  class="container mt-2"
+>
+  <app-login-buttons [continueLabel]="true"></app-login-buttons>
 </div>
+<mat-spinner
+  *ngIf="!(this.userService.isAuthLoaded | async)"
+  mode="indeterminate"
+  diameter="30"
+  class="mx-auto"
+></mat-spinner>

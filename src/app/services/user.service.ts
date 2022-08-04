@@ -6,8 +6,10 @@ import {
   Firestore,
   setDoc,
 } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
 import { Observable, shareReplay } from 'rxjs';
 import { PROFILES_PATH, USERS_PATH } from '../constants/firestore';
+import { paths } from '../constants/paths';
 import { Doc, FireCache } from '../models/firestore';
 import { Author, AuthorType, Profile, ProfileType } from '../models/user';
 import { User, UserType } from './../models/user';
@@ -19,22 +21,28 @@ import { readDoc } from './firestore-tools';
 export class UserService {
   public user: UserType | undefined;
   public author: AuthorType | undefined;
-  private uid: string | undefined;
   public $user: Observable<Doc<UserType> | undefined>;
+  public isAuthLoaded: Observable<boolean>;
 
-  constructor(private firestore: Firestore, private auth: Auth) {
+  constructor(
+    private firestore: Firestore,
+    private auth: Auth,
+    private router: Router
+  ) {
+    this.isAuthLoaded = new Observable<boolean>((observer) => {
+      observer.next(false);
+      this.auth.onAuthStateChanged(() => observer.next(true));
+    }).pipe(shareReplay(1));
     this.$user = new Observable<Doc<UserType> | undefined>((subscriber) => {
       this.auth.onAuthStateChanged((user) => {
-        if (user) {
-          this.uid = user.uid;
+        if (user)
           this.getUserFromDB(user).then((userDoc) => {
             this.verifyProfileCreated(user.uid, userDoc);
             this.user = userDoc;
             this.author = Author.fromUser(userDoc, user.uid);
             subscriber.next(new Doc<UserType>(user.uid, userDoc));
           });
-        } else {
-          this.uid = undefined;
+        else {
           this.user = undefined;
           this.author = undefined;
           subscriber.next(undefined);
@@ -54,20 +62,22 @@ export class UserService {
     );
     // creates new user if does not exists yet
     if (!userSnap.exists()) {
-      const userDoc = await this.createNewUser(user, userRef);
+      const userDoc = await this.registerUser(user, userRef);
       return userDoc;
     }
     return userSnap.data();
   };
 
-  private createNewUser = async (
+  private registerUser = async (
     user: AuthUser,
     userRef: DocumentReference<UserType>
   ) => {
     const userDoc = User.now(user.email, user.displayName, user.photoURL);
     setDoc(userRef, userDoc);
     // creates also user profile
-    this.createNewProfile(user.uid, Profile.fromUser(userDoc));
+    this.createProfile(user.uid, Profile.fromUser(userDoc));
+    // redirect to settings page to complete profile details
+    this.router.navigateByUrl('/' + paths.settings);
     return userDoc;
   };
 
@@ -78,10 +88,10 @@ export class UserService {
       FireCache.Server
     );
     // creates new user profile if does not exists yet
-    if (!profieSnap.exists()) this.createNewProfile(uid, user as ProfileType);
+    if (!profieSnap.exists()) this.createProfile(uid, user as ProfileType);
   };
 
-  private createNewProfile = async (uid: string, profile: ProfileType) => {
+  private createProfile = async (uid: string, profile: ProfileType) => {
     const profileRef = doc(this.firestore, PROFILES_PATH, uid).withConverter(
       Profile.converter
     );

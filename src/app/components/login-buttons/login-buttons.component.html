@@ -1,3 +1,6 @@
+<h2 *ngIf="this.continueLabel" i18n="@@LoginBeforeContinue" class="text-center">
+  Before continuing, please login first.
+</h2>
 <div fxLayout="column" fxLayoutAlign="space-between center">
   <button
     *ngFor="let provider of this.providers"

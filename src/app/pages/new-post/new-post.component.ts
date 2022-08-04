@@ -44,7 +44,7 @@ export class NewPostComponent implements OnInit {
 
   constructor(
     private postsService: PostsService,
-    private userService: UserService,
+    public userService: UserService,
     private snackbarService: SnackbarService,
     private router: Router,
     private formBuilder: FormBuilder
@@ -57,6 +57,9 @@ export class NewPostComponent implements OnInit {
     this.userSub = this.userService.$user.subscribe((user) =>
       this.initializeForm(user)
     );
+  }
+  ngOnDestroy(): void {
+    this.userSub?.unsubscribe();
   }
 
   private initializeForm = (user: Doc<UserType> | undefined) => {

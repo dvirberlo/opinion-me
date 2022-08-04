@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { paths } from 'src/app/constants/paths';
 import { AuthService } from 'src/app/services/auth.service';
@@ -36,6 +36,8 @@ export class LoginButtonsComponent implements OnInit {
   private login = (action: () => Promise<void>) => {
     action().then(() => this.router.navigateByUrl('/' + paths.home));
   };
+
+  @Input() public continueLabel: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
