@@ -29,6 +29,16 @@ service cloud.firestore {
       allow delete: if     isSelf(uid, request.auth);
     }
 
+    match /notifications/{uid} {
+      allow get: if     true;
+      allow list: if     false;
+      allow create: if notificationsCreateCheck(request.resource.data) &&
+        isSelf(uid, request.auth);
+      allow update: if notificationsUpdateCheck(request.resource.data) &&
+        (isSelf(uid, request.auth) || notificationsUpdated(resource.data, request.resource.data, request.auth));
+      allow delete: if     isSelf(uid, request.auth);
+    }
+
     match /posts/{postId} {
       allow get: if     true;
       allow list: if     true;
@@ -68,6 +78,13 @@ service cloud.firestore {
     }
     function profilesUpdateCheck(data){
       return profilesCreateCheck(data) && request.resource.data.diff(resource.data).addedKeys().size() == 0;
+    }
+    function notificationsCreateCheck(data){
+      return data.repliesOnPosts is list &&
+        data.keys().hasOnly(["repliesOnPosts"]);
+    }
+    function notificationsUpdateCheck(data){
+      return notificationsCreateCheck(data) && request.resource.data.diff(resource.data).addedKeys().size() == 0;
     }
     function postsCreateCheck(data){
       return data.title is string &&
@@ -162,6 +179,27 @@ service cloud.firestore {
         changedSelfOnce(resourceData.reactions.wow, requestData.reactions.wow, auth) &&
         changedSelfOnce(resourceData.reactions.angry, requestData.reactions.angry, auth);
       return selfOnce;
+    }
+
+    function notificationsUpdated(resourceData, requestData, auth){
+      return notificationsRepliesOnPosts(resourceData, requestData, auth);
+    }
+    function notificationsRepliesOnPosts(resourceData, requestData, auth){
+      let added = requestData.repliesOnPosts.removeAll(resourceData.repliesOnPosts);
+      let removed = resourceData.repliesOnPosts.removeAll(requestData.repliesOnPosts);
+      let addedItem = added[0];
+      let addedValid = addedItem is map && addedItem.postId is string && addedItem.title is string &&
+        addedItem.date is number &&
+        addedItem.content is string &&
+        addedItem.author is map &&
+        addedItem.author.displayName is string &&
+        addedItem.author.photoURL is string &&
+        addedItem.author.uid is string &&
+        addedItem.keys().hasOnly(["postId","title","date","content","author"]) &&
+        addedItem.author.keys().hasOnly(["displayName","photoURL","uid"]) &&
+        addedItem.author.uid == auth.uid;
+      return affectedOnly(resourceData, requestData, ["repliesOnPosts"].toSet()) &&
+        removed.size() == 0 && added.size() == 1 && addedValid;
     }
   }
 }

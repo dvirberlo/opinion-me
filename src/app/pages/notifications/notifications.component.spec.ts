@@ -2,27 +2,27 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { AppRoutingModule } from 'src/app/app-routing.module';
+import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from 'src/environments/environment';
 
-import { ButtomPanelComponent } from './buttom-panel.component';
+import { NotificationsComponent } from './notifications.component';
 
-describe('ButtomPanelComponent', () => {
-  let component: ButtomPanelComponent;
-  let fixture: ComponentFixture<ButtomPanelComponent>;
+describe('NotificationsComponent', () => {
+  let component: NotificationsComponent;
+  let fixture: ComponentFixture<NotificationsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ButtomPanelComponent],
+      declarations: [NotificationsComponent],
       imports: [
+        RouterTestingModule,
         provideFirebaseApp(() => initializeApp(environment.firebase)),
         provideFirestore(() => getFirestore()),
         provideAuth(() => getAuth()),
-        AppRoutingModule,
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ButtomPanelComponent);
+    fixture = TestBed.createComponent(NotificationsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

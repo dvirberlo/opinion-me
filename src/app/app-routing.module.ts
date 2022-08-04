@@ -5,6 +5,7 @@ import { ExploreComponent } from './pages/explore/explore.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { NewPostComponent } from './pages/new-post/new-post.component';
+import { NotificationsComponent } from './pages/notifications/notifications.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { PostComponent } from './pages/post/post.component';
 import { ProfileComponent } from './pages/profile/profile.component';
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: paths.tags + '/:id', component: TagsComponent },
   { path: paths.settings, component: SettingsComponent },
   { path: paths.explore, component: ExploreComponent },
+  { path: paths.notifications, component: NotificationsComponent },
   // make sure leave this last in the list because appearently the order here matters
   { path: '**', component: PageNotFoundComponent },
 ];

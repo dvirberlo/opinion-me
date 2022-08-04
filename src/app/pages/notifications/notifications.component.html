@@ -1,0 +1,59 @@
+<div class="container mt-1">
+  <mat-card
+    *ngFor="
+      let notify of (
+        this.notificationService.n9ns | async
+      )?.repliesOnPosts?.reverse()
+    "
+  >
+    <mat-card-title>
+      {{ notify.title }}
+    </mat-card-title>
+    <mat-card-subtitle
+      class="ms-1 my-1 linkCursor multilineText words-break d-inline-block"
+      [routerLink]="['/', paths.profile, notify.author.uid]"
+    >
+      <app-profile-view
+        [photoURL]="notify.author.photoURL || ''"
+        [displayName]="notify.author.displayName || ''"
+        [date]="notify.date"
+        type="oneLine"
+      ></app-profile-view>
+    </mat-card-subtitle>
+    <!-- reply content -->
+    <mat-card-content class="ms-1 mb-0 multilineText words-break d-block">
+      {{ notify.content }}
+    </mat-card-content>
+    <div class="text-end">
+      <button
+        (click)="this.dismiss(notify)"
+        class="mt-1 mx-2"
+        ngClass.lt-sm="mat-icon-button"
+        mat-button
+      >
+        <span class="material-symbols-rounded"> done_all </span>
+        <span ngClass.lt-sm="d-none" i18n="@@DismissButton"> Dismiss </span>
+      </button>
+      <button
+        (click)="this.dismiss(notify)"
+        [routerLink]="['/', paths.post, notify.postId]"
+        class="mt-1 mx-2"
+        ngClass.lt-sm="mat-icon-button"
+        color="accent"
+        mat-button
+      >
+        <span ngClass.lt-sm="d-none" i18n="@@OpenPostButton"> Open post </span>
+        <span class="material-symbols-rounded"> arrow_forward </span>
+      </button>
+    </div>
+  </mat-card>
+  <h3
+    *ngIf="
+      (this.notificationService.n9ns | async)?.repliesOnPosts?.length === 0
+    "
+    class="text-center"
+    i18n="@@NoNotifications"
+  >
+    Nothing's here yet...
+  </h3>
+</div>

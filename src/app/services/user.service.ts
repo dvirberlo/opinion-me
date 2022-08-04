@@ -8,9 +8,14 @@ import {
 } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Observable, shareReplay } from 'rxjs';
-import { PROFILES_PATH, USERS_PATH } from '../constants/firestore';
 import { paths } from '../constants/paths';
+import {
+  NOTIFICATIONS_PATH,
+  PROFILES_PATH,
+  USERS_PATH,
+} from '../constants/firestore';
 import { Doc, FireCache } from '../models/firestore';
+import { Notifications, NotificationsType } from '../models/notifications';
 import { Author, AuthorType, Profile, ProfileType } from '../models/user';
 import { User, UserType } from './../models/user';
 import { readDoc } from './firestore-tools';
@@ -37,7 +42,7 @@ export class UserService {
       this.auth.onAuthStateChanged((user) => {
         if (user)
           this.getUserFromDB(user).then((userDoc) => {
-            this.verifyProfileCreated(user.uid, userDoc);
+            this.verifyCreated(user.uid, userDoc);
             this.user = userDoc;
             this.author = Author.fromUser(userDoc, user.uid);
             subscriber.next(new Doc<UserType>(user.uid, userDoc));
@@ -74,21 +79,29 @@ export class UserService {
   ) => {
     const userDoc = User.now(user.email, user.displayName, user.photoURL);
     setDoc(userRef, userDoc);
-    // creates also user profile
+
+    // creates also user profile & notifications
     this.createProfile(user.uid, Profile.fromUser(userDoc));
+    this.createNotifications(user.uid);
     // redirect to settings page to complete profile details
     this.router.navigateByUrl('/' + paths.settings);
     return userDoc;
   };
 
-  private verifyProfileCreated = async (uid: string, user: UserType) => {
+  private verifyCreated = async (uid: string, user: UserType) => {
     const profieSnap = await readDoc<ProfileType>(
       doc(this.firestore, PROFILES_PATH, uid),
       Profile.converter,
       FireCache.Server
     );
-    // creates new user profile if does not exists yet
+    const notificationsSnap = await readDoc<NotificationsType>(
+      doc(this.firestore, NOTIFICATIONS_PATH, uid),
+      Notifications.converter,
+      FireCache.Server
+    );
+    // creates new user profile & notifications if does not exists yet
     if (!profieSnap.exists()) this.createProfile(uid, user as ProfileType);
+    if (!notificationsSnap.exists()) this.createNotifications(uid);
   };
 
   private createProfile = async (uid: string, profile: ProfileType) => {
@@ -96,6 +109,14 @@ export class UserService {
       Profile.converter
     );
     setDoc(profileRef, profile);
+  };
+  private createNotifications = async (uid: string) => {
+    const notificationsRef = doc(
+      this.firestore,
+      NOTIFICATIONS_PATH,
+      uid
+    ).withConverter(Notifications.converter);
+    setDoc(notificationsRef, Notifications.empty());
   };
 
   public getProfile = (uid: string) =>

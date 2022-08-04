@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NotificationService } from 'src/app/services/notification.service';
 import { paths } from '../../constants/paths';
 
 @Component({
@@ -8,7 +9,7 @@ import { paths } from '../../constants/paths';
 })
 export class ButtomPanelComponent implements OnInit {
   public paths = paths;
-  constructor() {}
+  constructor(public notificationService: NotificationService) {}
 
   ngOnInit(): void {}
 }

@@ -39,7 +39,20 @@
       [routerLinkActive]="['mat-accent']"
     >
       <div fxLayout="row" fxLayoutAlign="none center">
-        <span class="material-symbols-rounded">notifications</span>
+        <span
+          class="material-symbols-rounded"
+          [matBadge]="
+            (this.notificationService.n9ns | async)?.repliesOnPosts?.length
+          "
+          [matBadgeHidden]="
+            (this.notificationService.n9ns | async)?.repliesOnPosts?.length ===
+            0
+          "
+          matBadgeColor="accent"
+          matBadgePosition="above before"
+          matBadgeSize="small"
+          >notifications</span
+        >
         <span i18n="@@NotificationsButtonText">Notifications</span>
       </div>
     </button>

@@ -28,6 +28,7 @@ import { ExploreComponent } from './pages/explore/explore.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { NewPostComponent } from './pages/new-post/new-post.component';
+import { NotificationsComponent } from './pages/notifications/notifications.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { PostComponent } from './pages/post/post.component';
 import { ProfileComponent } from './pages/profile/profile.component';
@@ -54,6 +55,7 @@ import { TagsComponent } from './pages/tags/tags.component';
     LoginButtonsComponent,
     ExploreComponent,
     ProfileViewComponent,
+    NotificationsComponent,
   ],
   imports: [
     provideFirebaseApp(() => initializeApp(environment.firebase)),

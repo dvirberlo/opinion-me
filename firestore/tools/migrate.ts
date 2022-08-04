@@ -12,7 +12,7 @@ import { Profile, User } from '../../src/app/models/user';
 // Note: you will need to add .env in /firestore and set GOOGLE_APPLICATION_CREDENTIALS path to the .json token file
 envConfig();
 const DB_NAME = 'opinion-me-testing';
-const VERSION = 3;
+const VERSION = 4;
 
 const main = async () => {
   const app = initializeApp({
@@ -43,7 +43,7 @@ const main = async () => {
       if (data) await doc.withConverter(converter).set(data);
     });
   });
-  // setInfo(db.collection('info'), VERSION);
+  setInfo(db.collection('info'), VERSION);
 };
 
 const mapAllDocs = async (

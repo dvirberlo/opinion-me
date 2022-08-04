@@ -1,9 +1,11 @@
 import {
   getRepliesPath,
+  NOTIFICATIONS_PATH,
   POSTS_PATH,
   PROFILES_PATH,
   USERS_PATH,
 } from '../../src/app/constants/firestore';
+import { Notifications } from '../../src/app/models/notifications';
 import { Post } from '../../src/app/models/post';
 import { Reply } from '../../src/app/models/replies';
 import { Author, Profile, User } from '../../src/app/models/user';
@@ -241,4 +243,22 @@ const replies = generateRuleAndFunctions(
     delete: selfWasAuthorCheck,
   },
   'replyId'
+);
+
+const notificationsUpdated =
+  'notificationsUpdated(resource.data, request.resource.data, request.auth)';
+
+const notifications = generateRuleAndFunctions(
+  Notifications.empty(),
+  'notifications',
+  NOTIFICATIONS_PATH,
+  {
+    get: ALWAYS_ALLOW,
+    list: ALWAYS_DENY,
+    create: selfUidCheck,
+    update: requireAny(selfUidCheck, notificationsUpdated),
+    delete: selfUidCheck,
+  },
+  'uid',
+  ['repliesOnPosts']
 );

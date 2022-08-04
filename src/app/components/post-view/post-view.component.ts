@@ -78,7 +78,7 @@ export class PostViewComponent implements OnInit {
       return;
     const reaply = Reply.now(this.userService.author, result);
     this.repliesService
-      .addReply(structuredClone(reaply), this.post.id)
+      .addReply(structuredClone(reaply), this.post)
       .then((reference: DocumentReference<ReplyType>) => {
         this.repliesReader?.addedToTop(
           new Doc<ReplyType>(reference.id, reaply)
