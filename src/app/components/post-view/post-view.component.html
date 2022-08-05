@@ -17,9 +17,9 @@
   </mat-card-header>
   <!-- content -->
   <mat-card-content class="my-1">
-    <span class="multilineText words-break d-inline-block">
-      {{ this.previewMode ? this.previewContent() : this.post.data.content }}
-    </span>
+    <span class="multilineText words-break d-inline-block">{{
+      this.previewMode ? this.previewContent() : this.post.data.content
+    }}</span>
   </mat-card-content>
   <!-- tags -->
   <div class="mb-1" *ngIf="!this.previewMode">
@@ -103,12 +103,12 @@
   ></app-replies-view>
   <button
     *ngIf="this.previewMode"
-    mat-raised-button
+    mat-button
     color="accent"
     (click)="this.previewMode = false"
     class="mt-1"
   >
+    <span i18n="@@ContinueReadingButton"> Continue reading </span>
     <span class="material-symbols-rounded"> arrow_forward </span>
-    <span i18n="@@ContinueReadingButton">Continue reading</span>
   </button>
 </mat-card>

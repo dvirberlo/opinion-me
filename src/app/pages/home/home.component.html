@@ -1,4 +1,5 @@
 <div class="container">
+  <h2 i18n="@@RecentPostsTitle" class="text-center">Recent Posts:</h2>
   <section *ngFor="let post of this.postsReader?.docs">
     <app-post-view [post]="post" [previewMode]="true"></app-post-view>
   </section>
@@ -17,4 +18,10 @@
     diameter="30"
     class="mx-auto"
   ></mat-spinner>
+  <div
+    *ngIf="!this.postsReader?.isLoading && this.postsReader?.docs?.length === 0"
+    class="text-center"
+  >
+    <h3 i18n="@@NoPostsIndication">No posts yet</h3>
+  </div>
 </div>

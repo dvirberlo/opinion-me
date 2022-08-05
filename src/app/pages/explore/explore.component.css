@@ -1,10 +1,13 @@
 .tagCard {
   min-width: 120px;
   min-height: 120px;
-  height: 24vmin;
-  width: 24vmin;
+  width: 200px;
+  height: 200px;
+  max-width: 42vw;
+  max-height: 42vw;
   line-height: 30px;
   border-radius: 10px;
+  font-size: large;
 }
 .tagsSearch {
   width: 500px;

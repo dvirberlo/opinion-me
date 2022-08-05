@@ -17,4 +17,10 @@
     diameter="30"
     class="mx-auto"
   ></mat-spinner>
+  <div
+    *ngIf="!this.postsReader?.isLoading && this.postsReader?.docs?.length === 0"
+    class="text-center"
+  >
+    <h3 i18n="@@NoPostsIndication">No posts yet</h3>
+  </div>
 </div>
