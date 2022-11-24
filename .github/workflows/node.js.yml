@@ -29,4 +29,4 @@ jobs:
     - run: npm install --global yarn
     - run: npx yarn
     - run: npx yarn run build
-    - run: npx yarn ng test --browsers ChromeHeadless
+    - run: npx yarn ng test --browsers ChromeHeadless --watch=false
